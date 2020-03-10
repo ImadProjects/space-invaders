@@ -9,7 +9,7 @@
   (actor-position actor))
 
 (define (actor-send new-actor new-msg)
-  (struct-copy actor new-actor (mailbox (cons (actor-mailbox new-actor) new-msg))))
+  (struct-copy actor new-actor (mailbox (cons new-msg (actor-mailbox new-actor)))))
 
 (define (update-position new-actor)
   (struct-copy actor new-actor (position (list
@@ -24,3 +24,5 @@
     
 (trace actor-update)
 (trace actor-location)
+
+(provide actor actor-location actor-send actor-update update-position actor-mailbox)

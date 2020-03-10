@@ -25,4 +25,5 @@
 (trace actor-update)
 (trace actor-location)
 
-(provide actor actor-location actor-send actor-update update-position actor-mailbox)
+(define vactor? actor?)
+(provide actor actor-location actor-send actor-update update-position actor-mailbox vactor?)

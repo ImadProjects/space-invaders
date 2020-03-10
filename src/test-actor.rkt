@@ -2,7 +2,7 @@
 
 (require rackunit)
 (require rackunit/text-ui)
-(require "Shoot.rkt")
+(require "contract.rkt")
 
 (define all-tests
   (test-suite

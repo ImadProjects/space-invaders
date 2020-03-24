@@ -18,9 +18,7 @@
                (mailbox (cdr (actor-mailbox new-actor)))))
 
 (define (actor-update new-actor)
-  (cond
-    ((empty? (actor-mailbox new-actor)) new-actor)
-    ((equal? 'move (caar (actor-mailbox new-actor))) (actor-update (update-position new-actor)))))
+  (new-actor-update new-actor '()))
 
 (define (new-actor-update new-actor created-actors)
   (cond
@@ -28,7 +26,10 @@
     ((equal? 'create (caar (actor-mailbox new-actor)))
      (new-actor-update (struct-copy actor new-actor (mailbox (cdr (actor-mailbox new-actor))))
                        (cons (actor (list (cadar (actor-mailbox new-actor)) (caddar (actor-mailbox new-actor))) '()) created-actors)))
-    (else (new-actor-update (actor-update new-actor) created-actors))))
+    ((equal? 'move (caar (actor-mailbox new-actor)))
+     (new-actor-update (update-position new-actor) created-actors))
+
+    (#t (new-actor-update (actor (actor-position new-actor) (actor-mailbox new-actor)) created-actors))))
 
     
 ;(trace actor-update)
@@ -38,4 +39,4 @@
 (define message? list?)
 (define location? list?)
 (define vactor? actor?)
-(provide actor actor-location actor-send actor-update update-position actor-mailbox vactor? location? mailbox? message?)
+(provide actor actor-location actor-send actor-update update-position actor-mailbox vactor? location? mailbox? message? new-actor-update)

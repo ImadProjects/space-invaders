@@ -19,17 +19,19 @@
       (check-equal? (actor-mailbox (actor-send actor-test '(mooooove 100 100))) '((mooooove 100 100)))))
 
    (test-case
-    "updates an actor according to its mailbox"
-    (let* ([actor-test (actor '(0 0) '((move 1 1) (move 2 2)))]
-           [actor-expected (actor '(3 3) '())]) 
-            (and (check-equal? (actor-location (actor-update actor-test)) '(3 3)))
-                 (check-equal? (actor-mailbox (actor-update actor-test)) '())))
-   (test-case
     "updates an actor with an empty mailbox"
    (let* ([actor-test (actor '(0 0) '())]
            [actor-expected (actor '(0 0) '())]) 
-            (and (check-equal? (actor-location (actor-update actor-test)) '(0 0)))
-                 (check-equal? (actor-mailbox (actor-update actor-test)) '())))
+            (and (check-equal? (actor-location (car (actor-update actor-test))) '(0 0)))
+                 (check-equal? (actor-mailbox (car (actor-update actor-test))) '())))
+
+   (test-case
+    "updates an actor with a creation message in its mailbox"
+    (let* ([actor-test (actor '(0 0) '((create 1 2) (create 2 3)))]
+           [list-expected '((actor '(0 0) '()) (actor '(2 3) '()) '(actor '(1 2) '()))])
+           (and (check-equal? (actor-location (caddr (actor-update actor-test))) '(1 2))
+                (check-equal? (actor-location (cadr (actor-update actor-test))) '(2 3))
+                (check-equal? (actor-location (car (actor-update actor-test))) '(0 0)))))
    ))
 
 

@@ -21,6 +21,15 @@
   (cond
     ((empty? (actor-mailbox new-actor)) new-actor)
     ((equal? 'move (caar (actor-mailbox new-actor))) (actor-update (update-position new-actor)))))
+
+(define (new-actor-update new-actor created-actors)
+  (cond
+    ((empty? (actor-mailbox new-actor)) (cons new-actor created-actors))
+    ((equal? 'create (caar (actor-mailbox new-actor)))
+     (new-actor-update (struct-copy actor new-actor (mailbox (cdr (actor-mailbox new-actor))))
+                       (cons (actor (list (cadar (actor-mailbox new-actor)) (caddar (actor-mailbox new-actor))) '()) created-actors)))
+    (else (new-actor-update (actor-update new-actor) created-actors))))
+
     
 ;(trace actor-update)
 ;(trace actor-location)

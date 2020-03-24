@@ -22,8 +22,11 @@
     ((empty? (actor-mailbox new-actor)) new-actor)
     ((equal? 'move (caar (actor-mailbox new-actor))) (actor-update (update-position new-actor)))))
     
-(trace actor-update)
-(trace actor-location)
+;(trace actor-update)
+;(trace actor-location)
 
+(define mailbox? list?)
+(define message? list?)
+(define location? list?)
 (define vactor? actor?)
-(provide actor actor-location actor-send actor-update update-position actor-mailbox vactor?)
+(provide actor actor-location actor-send actor-update update-position actor-mailbox vactor? location? mailbox? message?)

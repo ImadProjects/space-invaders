@@ -2,8 +2,8 @@
 (require "Shoot.rkt")
  
 (provide (contract-out     
-    [actor-location (-> vactor? list?)]
-    [actor-send (-> vactor? list? vactor?)]
+    [actor-location (-> vactor? location?)]
+    [actor-send (-> vactor? message? vactor?)]
     [update-position ( -> vactor? vactor? )]
     [actor-update ( -> vactor? vactor?)]
 ))

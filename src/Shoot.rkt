@@ -1,4 +1,5 @@
 #lang racket
+
 (require racket/trace)
 
 (struct actor (position mailbox))
@@ -13,25 +14,26 @@
 
 (define (update-position new-actor)
   (struct-copy actor new-actor (position (list
-                                          (+ (car (actor-position new-actor)) (cadar (actor-mailbox new-actor)))
-                                          (+ (cadr (actor-position new-actor)) (caddar (actor-mailbox new-actor)))))
-               (mailbox (cdr (actor-mailbox new-actor)))))
+                                            (+ (car (actor-position new-actor)) (cadar (actor-mailbox new-actor)))
+					                                              (+ (cadr (actor-position new-actor)) (caddar (actor-mailbox new-actor)))))
+										                     (mailbox (cdr (actor-mailbox new-actor)))))
 
 (define (actor-update new-actor)
   (new-actor-update new-actor '()))
 
 (define (new-actor-update new-actor created-actors)
   (cond
-    ((empty? (actor-mailbox new-actor)) (cons new-actor created-actors))
-    ((equal? 'create (caar (actor-mailbox new-actor)))
-     (new-actor-update (struct-copy actor new-actor (mailbox (cdr (actor-mailbox new-actor))))
-                       (cons (actor (list (cadar (actor-mailbox new-actor)) (caddar (actor-mailbox new-actor))) '()) created-actors)))
-    ((equal? 'move (caar (actor-mailbox new-actor)))
-     (new-actor-update (update-position new-actor) created-actors))
-
-    (#t (new-actor-update (actor (actor-position new-actor) (actor-mailbox new-actor)) created-actors))))
-
-    
+      [(empty? (actor-mailbox new-actor)) (cons new-actor created-actors)]
+      [(equal? 'create (caar (actor-mailbox new-actor)))
+	       (new-actor-update (struct-copy actor new-actor (mailbox (cdr (actor-mailbox new-actor))))
+	                              (cons (actor (list (cadar (actor-mailbox new-actor)) (caddar (actor-mailbox new-actor))) '()) created-actors))]
+        [(equal? 'move (caar (actor-mailbox new-actor)))
+					       (new-actor-update (update-position new-actor) created-actors)]
+        [(equal? 'message (caar (actor-mailbox new-actor)))
+						        (begin (actor-send (caddr (actor-mailbox new-actor)) (cadddr (actor-mailbox new-actor new-actor)))
+						            (new-actor-update (actor (actor-position new-actor) (actor-mailbox new-actor)) created-actors))]
+	[else (new-actor-update (actor (actor-position new-actor) (actor-mailbox new-actor)) created-actors)]))
+									
 ;(trace actor-update)
 ;(trace actor-location)
 

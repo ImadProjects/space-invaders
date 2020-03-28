@@ -2,7 +2,7 @@
 
 (require racket/trace)
 
-(struct actor (position mailbox))
+(struct actor (position mailbox)#:transparent)
 
 (define me (actor '(1 2) '((move 3 8) (move -2 -4))))
 
@@ -42,3 +42,38 @@
 (define location? list?)
 (define vactor? actor?)
 (provide actor actor-location actor-send actor-update update-position actor-mailbox vactor? location? mailbox? message? new-actor-update)
+
+
+(struct world (actors) #:transparent)
+
+(struct runtime (tick world) #:transparent)
+
+(define (send world1 message)
+      (for ([i (world-actors world1)])
+      (struct-copy world world1 (actors
+                                    (cons (world-actors world1)
+                                          (actor-send i message))))))
+(define monde (world (list me) ))
+(send monde '(move 1 1))
+
+
+;(actor-send me '(move 1 1) )
+
+(define (update-world w)
+  (define is (world-actors w))
+  (struct-copy world w [actors (map actor-update  is)]))
+
+
+;(update-world  monde )
+
+#|
+(define (runtime world1 message)
+  (if (null? message)
+      world
+      ((actor-send (car (world-actors world1) message))
+       (actor-update (car (world-actors world1)))
+      (struct-copy world world1 (actors
+                                    (cons (world-actors (runtime ( world1 message)))
+                                          (actor-update (car (world-actors world1)))))))))
+
+                                          |#

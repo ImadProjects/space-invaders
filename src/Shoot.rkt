@@ -44,36 +44,29 @@
 (provide actor actor-location actor-send actor-update update-position actor-mailbox vactor? location? mailbox? message? new-actor-update)
 
 
+
+;-----------question2 il faut qu'on la mettre dans le fichier qui correspond
 (struct world (actors) #:transparent)
+(struct runtime (world tick duree))
 
-(struct runtime (tick world) #:transparent)
-
-(define (send world1 message)
-      (for ([i (world-actors world1)])
-      (struct-copy world world1 (actors
-                                    (cons (world-actors world1)
-                                          (actor-send i message))))))
+(define (send_to_world msg wrd)
+  (letrec([newworld(lambda(msg l)
+           (cond
+             [(null? l) '()]
+             [else (cons (actor-send (car l) msg)
+                   (newworld msg (cdr l)))]))])
+   (world (newworld msg (world-actors wrd)))))
 (define monde (world (list me) ))
-(send monde '(move 1 1))
 
 
-;(actor-send me '(move 1 1) )
 
+(actor-send me '(move 1 1) )
+(send_to_world '(move 1 1)  monde) ; je compare le résultat avec la fonction actor-send
 (define (update-world w)
   (define is (world-actors w))
   (struct-copy world w [actors (map actor-update  is)]))
 
 
-;(update-world  monde )
+(update-world  monde ); faire jouer les acteurs 
 
-#|
-(define (runtime world1 message)
-  (if (null? message)
-      world
-      ((actor-send (car (world-actors world1) message))
-       (actor-update (car (world-actors world1)))
-      (struct-copy world world1 (actors
-                                    (cons (world-actors (runtime ( world1 message)))
-                                          (actor-update (car (world-actors world1)))))))))
-
-                                          |#
+;-------------------------------------------------------------------------

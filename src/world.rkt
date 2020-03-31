@@ -21,4 +21,18 @@
 	      (update-world (struct-copy world w (actors (cdr (world-actors w)))) (world (append (actor-update (car (world-actors w))) (world-actors nw))))))
 ;(update-world  monde new-world);
 
+
+
+(define (remove-dead-actors w)
+  (define (actors_alive? x)
+    (not (collisions? x (world-actors w))))
+  (define p (world  
+         (filter actors_alive?  (world-actors w))))
+         p)
 (provide update-world send_to_world world)
+
+
+(define act (actor '(1 2) '()))
+(define missile (actor '(1 2) '()))
+(define monde (world (list act missile) ))
+;(remove-dead-actors monde)

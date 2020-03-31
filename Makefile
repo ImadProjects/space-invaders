@@ -1,7 +1,7 @@
 all: build
 
 build: 
-	echo "ok"
+		racket src/main.rkt
 
 test:
 	racket src/test-actor.rkt

@@ -1,5 +1,5 @@
 #lang racket
-(require "Shoot.rkt")
+(require "actors.rkt")
  
 (provide (contract-out     
     [actor-location (-> vactor? location?)]

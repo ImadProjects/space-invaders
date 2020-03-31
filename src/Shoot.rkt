@@ -62,25 +62,23 @@
 
 ;(actor-send me '(move 1 1) )
 ;(send_to_world '(move 1 1)  monde) ; je compare le résultat avec la fonction actor-send
-(define (update-world w)
-  (define is (world-actors w))
-  (display w)
-  (struct-copy world w [actors (map actor-update  is)]))
+(define (update-world w nw)
+  (if (empty? (world-actors w))
+        nw
+	      (update-world (struct-copy world w (actors (cdr (world-actors w)))) (world (append (actor-update (car (world-actors w))) (world-actors nw))))))
 
-
-;(update-world  monde ); faire jouer les acteurs 
-
-;[TODO]: cette fonction ne marche pas avac une liste de messages de longueur > 1 essayez de résoudre ce problème je n'y arrive pas.
-
+(define new-world (world '()))
+;(update-world  monde new-world); faire jouer les acteurs
 
 (define (game runtime1 msgs debut) ;boucle de jeu
   (cond
-    [(empty? msgs) (runtime-world runtime1) ]
-    [(equal? debut (runtime-duree runtime1)) (runtime-world runtime1)]
-    [else (define newruntime (runtime (update-world (send_to_world (car msgs) (runtime-world runtime1))) (runtime-tick runtime1) (runtime-duree runtime1)) )
-          (game newruntime (cdr msgs) (+ debut (runtime-tick newruntime)))]))
+      [(empty? msgs) (runtime-world runtime1) ]
+          [(equal? debut (runtime-duree runtime1)) (runtime-world runtime1)]
+	      [else (begin (define newruntime (struct-copy runtime runtime1 (world (update-world (send_to_world (car msgs) (runtime-world runtime1)) (world '()) ))))
+	                (game newruntime (cdr msgs) (+ debut (runtime-tick newruntime))))]))
 
-(define rn (runtime monde 1 4))    
+(define rn (runtime monde 1 4))
 
-(game rn '((move 3 8)) 0)
+;(game rn '((move 3 8)) 0)
+;(game rn '((move 3 8) (move 1 1)) 0)
 ;-------------------------------------------------------------------------

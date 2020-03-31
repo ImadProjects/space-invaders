@@ -41,7 +41,19 @@
 (define message? list?)
 (define location? list?)
 (define vactor? actor?)
-(provide actor actor-location actor-send actor-update update-position actor-mailbox vactor? location? mailbox? message? new-actor-update)
 
 
+;Normalement nos acteurs occuperons un espace repéré par les coordonnées cartésiennes des points extremes on doit penser alors à ajouter cela dans la structure 
+;actors mais pour l'instant on va les repérer qu'avec une seule coordonnée.  Dans ce cas, la fonction colliding est simple.
+(define (colliding? actor1 actor2)
+  (if (equal? (actor-position actor1) (actor-position actor2))
+  #t
+  #f))
+(define (collisions? x list_actors)
+   (for/or ([i list_actors]) (colliding? x i)))
 
+(provide actor actor-location actor-send actor-update update-position actor-mailbox vactor? location? mailbox? message? new-actor-update colliding? collisions?)
+
+;(colliding? me me)
+;(collisions? me (list me me))
+;(collisions? me '())

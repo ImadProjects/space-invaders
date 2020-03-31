@@ -8,7 +8,7 @@
 
 (define (actor-location actor)
   (actor-position actor))
-
+  
 (define (actor-send new-actor new-msg)
   (struct-copy actor new-actor (mailbox (cons new-msg (actor-mailbox new-actor)))))
 
@@ -47,7 +47,7 @@
 
 ;-----------question2 il faut qu'on la mettre dans le fichier qui correspond
 (struct world (actors) #:transparent)
-(struct runtime (world tick duree))
+(struct runtime (world tick duree) #:transparent)
 
 (define (send_to_world msg wrd)
   (letrec([newworld(lambda(msg l)
@@ -60,13 +60,27 @@
 
 
 
-(actor-send me '(move 1 1) )
-(send_to_world '(move 1 1)  monde) ; je compare le résultat avec la fonction actor-send
+;(actor-send me '(move 1 1) )
+;(send_to_world '(move 1 1)  monde) ; je compare le résultat avec la fonction actor-send
 (define (update-world w)
   (define is (world-actors w))
+  (display w)
   (struct-copy world w [actors (map actor-update  is)]))
 
 
-(update-world  monde ); faire jouer les acteurs 
+;(update-world  monde ); faire jouer les acteurs 
 
+;[TODO]: cette fonction ne marche pas avac une liste de messages de longueur > 1 essayez de résoudre ce problème je n'y arrive pas.
+
+
+(define (game runtime1 msgs debut) ;boucle de jeu
+  (cond
+    [(empty? msgs) (runtime-world runtime1) ]
+    [(equal? debut (runtime-duree runtime1)) (runtime-world runtime1)]
+    [else (define newruntime (runtime (update-world (send_to_world (car msgs) (runtime-world runtime1))) (runtime-tick runtime1) (runtime-duree runtime1)) )
+          (game newruntime (cdr msgs) (+ debut (runtime-tick newruntime)))]))
+
+(define rn (runtime monde 1 4))    
+
+(game rn '((move 3 8)) 0)
 ;-------------------------------------------------------------------------

@@ -1,5 +1,15 @@
 #lang racket
 (require "actors.rkt" "world.rkt")
+(require racket/trace)
+(require racket/match
+         racket/format
+         racket/list
+         lux
+         raart)
+(require
+  (prefix-in ct: charterm)
+  (prefix-in lux: lux)
+  (prefix-in raart: raart))
 
 (struct runtime (world tick duree) #:transparent)
 
@@ -14,9 +24,11 @@
 (define new-world (world '()))
 
 
-(define me (actor '(1 2) '((move 3 8) (move -2 -4))))
+(define me (actor '(1 2) '((move 3 8) (move -2 -4)) (fg 'red (raart:text ">>>"))))
 (define monde (world (list me) ))
 (define rn (runtime monde 1 4))
 
 ;(game rn '((move 3 8)) 0)
 (game rn '((move 3 8) (move 1 1)) 0)
+
+(provide (struct-out runtime) game)

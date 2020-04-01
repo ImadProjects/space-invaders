@@ -1,10 +1,22 @@
 #lang racket
 
 (require racket/trace)
+(require racket/match
+         racket/format
+         racket/list
+         lux
+         raart)
+(require
+  (prefix-in ct: charterm)
+  (prefix-in lux: lux)
+  (prefix-in raart: raart))
 
-(struct actor (position mailbox)#:transparent)
+(struct actor (position mailbox name)#:transparent)
 
-(define me (actor '(1 2) '((move 3 8) (move -2 -4))))
+(define me (actor '(1 2) '((move 3 8) (move -2 -4)) (fg 'red (raart:text ">>>") )))
+
+(define (name-of-actor actor)
+  (actor-name actor))
 
 (define (actor-location actor)
   (actor-position actor))
@@ -52,7 +64,7 @@
 (define (collisions? x list_actors)
    (for/or ([i list_actors]) (colliding? x i)))
 
-(provide actor actor-location actor-send actor-update update-position actor-mailbox vactor? location? mailbox? message? new-actor-update colliding? collisions?)
+(provide actor name-of-actor actor-location actor-send actor-update update-position actor-mailbox vactor? location? mailbox? message? new-actor-update colliding? collisions?)
 
 ;(colliding? me me)
 ;(collisions? me (list me me))

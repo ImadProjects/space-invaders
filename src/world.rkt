@@ -1,4 +1,14 @@
 #lang racket
+(require racket/trace)
+(require racket/match
+         racket/format
+         racket/list
+         lux
+         raart)
+(require
+  (prefix-in ct: charterm)
+  (prefix-in lux: lux)
+  (prefix-in raart: raart))
 (require "actors.rkt")
 
 (struct world (actors) #:transparent)
@@ -29,10 +39,12 @@
   (define p (world  
          (filter actors_alive?  (world-actors w))))
          p)
-(provide update-world send_to_world world)
+
+(provide (struct-out world))
+(provide update-world send_to_world )
 
 
-(define act (actor '(1 2) '()))
-(define missile (actor '(1 2) '()))
+(define act (actor '(1 2) '() (fg 'red (raart:text ">>>"))))
+(define missile (actor '(1 2) '() (fg 'red (raart:text ">>>"))))
 (define monde (world (list act missile) ))
 ;(remove-dead-actors monde)

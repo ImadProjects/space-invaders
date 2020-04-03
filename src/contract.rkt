@@ -1,5 +1,6 @@
 #lang racket
 (require "actors.rkt")
+(require "world.rkt")
  
 (provide (contract-out     
     [actor-location (-> vactor? location?)]
@@ -8,5 +9,4 @@
     [actor-update ( -> vactor? list?)]
 ))
 
-(provide actor actor-mailbox)
-(provide new-actor-update)
+(provide actor actor-mailbox new-actor-update world world-actors send-to-world runtime runtime-tick runtime-duree update-world game)

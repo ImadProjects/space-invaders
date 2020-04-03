@@ -28,8 +28,8 @@
 (define (update-world w nw)
   (if (empty? (world-actors w))
         nw
-	      (update-world (struct-copy world w (actors (cdr (world-actors w)))) (world (append (actor-update (car (world-actors w))) (world-actors nw))))))
-;(update-world  monde new-world);
+	      (update-world (struct-copy world w (actors (cdr (world-actors w)))) (world (append (car (actor-update (car (world-actors w)))) (world-actors nw))))))
+;(update-world  monde new-world)
 
 
 
@@ -48,3 +48,4 @@
 (define missile (actor '(1 2) '() (fg 'red (raart:text ">>>"))))
 (define monde (world (list act missile) ))
 ;(remove-dead-actors monde)
+;(send_to_world '(move 1 1)  monde)

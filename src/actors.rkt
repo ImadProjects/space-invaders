@@ -13,7 +13,7 @@
 
 (struct actor (position mailbox name)#:transparent)
 
-(define me (actor '(1 2) '((move 3 8) (move -2 -4)) (fg 'red (raart:text ">>>") )))
+(define me (actor '(1 2) '((move 3 8) (create 5 5 "1") (move -2 -4)) (fg 'red (raart:text ">>>") )))
 
 (define (name-of-actor actor)
   (actor-name actor))
@@ -31,20 +31,19 @@
 										                     (mailbox (cdr (actor-mailbox new-actor)))))
 
 (define (actor-update new-actor)
-  (new-actor-update new-actor '()))
+  (new-actor-update new-actor '() '()))
 
-(define (new-actor-update new-actor created-actors)
+(define (new-actor-update new-actor created-actors created-messages)
   (cond
-      [(empty? (actor-mailbox new-actor)) (cons new-actor created-actors)]
+      [(empty? (actor-mailbox new-actor)) (cons (cons new-actor created-actors) created-messages)]
       [(equal? 'create (caar (actor-mailbox new-actor)))
-	       (new-actor-update (struct-copy actor new-actor (mailbox (cdr (actor-mailbox new-actor))))
-	                              (cons (actor (list (cadar (actor-mailbox new-actor)) (caddar (actor-mailbox new-actor))) '()) created-actors))]
+       (new-actor-update (struct-copy actor new-actor (mailbox (cdr (actor-mailbox new-actor))))
+                         (cons (actor (list (cadar (actor-mailbox new-actor)) (caddar (actor-mailbox new-actor))) '() "created") created-actors) created-messages)]
         [(equal? 'move (caar (actor-mailbox new-actor)))
-					       (new-actor-update (update-position new-actor) created-actors)]
+         (new-actor-update (update-position new-actor) created-actors created-messages)]
         [(equal? 'message (caar (actor-mailbox new-actor)))
-						        (begin (actor-send (caddr (actor-mailbox new-actor)) (cadddr (actor-mailbox new-actor new-actor)))
-						            (new-actor-update (actor (actor-position new-actor) (actor-mailbox new-actor)) created-actors))]
-	[else (new-actor-update (actor (actor-position new-actor) (actor-mailbox new-actor)) created-actors)]))
+         (new-actor-update (struct-copy actor new-actor (mailbox (cdr (actor-mailbox new-actor)))) created-actors (cons (cdar (actor-mailbox new-actor)) created-messages)) ]
+	[else (new-actor-update (actor (actor-position new-actor) (cdr (actor-mailbox new-actor)) (actor-name new-actor)) created-actors created-messages)]))
 									
 ;(trace actor-update)
 ;(trace actor-location)
@@ -69,3 +68,6 @@
 ;(colliding? me me)
 ;(collisions? me (list me me))
 ;(collisions? me '())
+
+(define rené (actor '(1 2) '((create 5 5 "1") (move 3 8) (message create 1 1)) "rené"))
+(actor-update rené)

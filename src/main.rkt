@@ -18,7 +18,7 @@
   (cond
       [(empty? msgs) (runtime-world runtime1) ]
           [(equal? debut (runtime-duree runtime1)) (runtime-world runtime1)]
-	      [else (begin (define newruntime (struct-copy runtime runtime1 (world (update-world (send_to_world (car msgs) (runtime-world runtime1)) (world '()) ))))
+	      [else (begin (define newruntime (struct-copy runtime runtime1 (world (update-world (send-to-world (car msgs) (runtime-world runtime1)) (world '()) ))))
 	                (game newruntime (cdr msgs) (+ debut (runtime-tick newruntime))))]))
 
 (define new-world (world '()))

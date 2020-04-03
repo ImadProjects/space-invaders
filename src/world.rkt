@@ -13,7 +13,7 @@
 
 (struct world (actors) #:transparent)
 
-(define (send_to_world msg wrd)
+(define (send-to-world msg wrd)
   (letrec([newworld(lambda(msg l)
            (cond
              [(null? l) '()]
@@ -41,7 +41,7 @@
          p)
 
 (provide (struct-out world))
-(provide update-world send_to_world )
+(provide update-world send-to-world )
 
 
 (define act (actor '(1 2) '() (fg 'red (raart:text ">>>"))))

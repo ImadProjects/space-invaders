@@ -1,6 +1,7 @@
 #lang racket
 (require "actors.rkt")
 (require "world.rkt")
+(require "main.rkt")
  
 (provide (contract-out     
     [actor-location (-> vactor? location?)]

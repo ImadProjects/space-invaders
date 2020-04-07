@@ -10,44 +10,44 @@
 
    (test-case
     "checks an actor's location"
-    (let* ([actor-test (actor '(0 0) '() "test")])
+    (let* ([actor-test (actor '(0 0) '() "test" "test")])
       (check-equal? (actor-location actor-test) '(0 0))))
    
    (test-case
     "updates an actor's mailbox"
-    (let* ([actor-test (actor '(0 0) '() "test")])
+    (let* ([actor-test (actor '(0 0) '() "test" "test")])
       (check-equal? (actor-mailbox (actor-send actor-test '(mooooove 100 100))) '((mooooove 100 100)))))
 
    (test-case
     "updates an actor with an empty mailbox"
-   (let* ([actor-test (actor '(0 0) '() "test")]
-           [actor-expected (actor '(0 0) '() "test")]) 
+   (let* ([actor-test (actor '(0 0) '() "test" "test")]
+           [actor-expected (actor '(0 0) '() "test" "test")]) 
             (and (check-equal? (actor-location (caar (actor-update actor-test))) '(0 0)))
                  (check-equal? (actor-mailbox (caar (actor-update actor-test))) '())))
 
    (test-case
     "updates an actor with a creation message in its mailbox"
-    (let* ([actor-test (actor '(0 0) '((create 1 2) (create 2 3)) "test")]
-           [list-expected '((actor '(0 0) '() "p") (actor '(2 3) '() "p") '(actor '(1 2) '() "p"))])
+    (let* ([actor-test (actor '(0 0) '((create 1 2) (create 2 3)) "test" "test")]
+           [list-expected '((actor '(0 0) '() "p" "test") (actor '(2 3) '() "p" "test") '(actor '(1 2) '() "test" "test"))])
            (and (check-equal? (actor-location (caddar (actor-update actor-test))) '(1 2))
                 (check-equal? (actor-location (cadar (actor-update actor-test))) '(2 3))
                 (check-equal? (actor-location (caar (actor-update actor-test))) '(0 0)))))
    (test-case
      "checks the mails of world"
-     (let * ([world-test (world (list (actor '(1 2) '() "test")))]
-           [world-expected '(actor '(1 2) '(move 1 1) "test")])
+     (let * ([world-test (world (list (actor '(1 2) '() "test" "test")))]
+           [world-expected '(actor '(1 2) '(move 1 1) "test" "test")])
            (and (check-equal? (actor-location (car (world-actors (send-to-world '(move 1 1) world-test)))) '(1 2)))
                 (check-equal? (car (actor-mailbox (car (world-actors (send-to-world '(move 1 1) world-test))))) '(move 1 1))))
    (test-case
     "Checks that the actors in the world play"
-     (let * ([world-test (world (list (actor '(0 1) '((move 2 3)) "test") (actor '(4 5) '((move 6 7)) "test")))]
-     	     [world-expected (world (list (actor '(2 4) '() "francis") (actor '(10 12) '() "francois")))])										                          (and (check-equal? (actor-location (car (world-actors (update-world world-test (world '()))))) '(10 12))					                              (check-equal? (actor-location (cadr (world-actors (update-world world-test (world '()))))) '(2 4))					                                 (check-equal? (actor-mailbox (car (world-actors (update-world world-test (world '()))))) '()) 						                                    (check-equal? (actor-mailbox (cadr (world-actors (update-world world-test (world '()))))) '()))))	
+    (let * ([world-test (world (list (actor '(0 1) '((move 2 3)) "test" "test") (actor '(4 5) '((move 6 7)) "test" "test")))]
+            [world-expected (world (list (actor '(2 4) '() "francis" "test") (actor '(10 12) '() "francois" "test")))])										                          (and (check-equal? (actor-location (car (world-actors (update-world world-test (world '()))))) '(10 12))					                              (check-equal? (actor-location (cadr (world-actors (update-world world-test (world '()))))) '(2 4))					                                 (check-equal? (actor-mailbox (car (world-actors (update-world world-test (world '()))))) '()) 						                                    (check-equal? (actor-mailbox (cadr (world-actors (update-world world-test (world '()))))) '()))))	
    (test-case
     "checks the state of the world at the end of the game"
-    (let * ([runtime-test (runtime (world (list (actor '(1 2) '() "test"))) 1 4)]										                         [world-expected (world (list (actor '(7 10) '() "test")))])
+    (let * ([runtime-test (runtime (world (list (actor '(1 2) '() "test" "test"))) 1 4)]										                         [world-expected (world (list (actor '(7 10) '() "test" "test")))])
       (check-equal? (actor-location (car (world-actors (game runtime-test '((move 2 3) (move 4 5)) 0)))) '(7 10))))
 		
-))
+   ))
 
 
 

@@ -44,8 +44,8 @@
 (provide update-world send-to-world )
 
 
-(define act (actor '(1 2) '() (fg 'red (raart:text ">>>"))))
-(define missile (actor '(1 2) '() (fg 'red (raart:text ">>>"))))
+(define act (actor '(1 2) '() (fg 'red (raart:text ">>>")) "enemy"))
+(define missile (actor '(1 2) '() (fg 'red (raart:text ">>>")) "projectile"))
 (define monde (world (list act missile) ))
 ;(remove-dead-actors monde)
 ;(send_to_world '(move 1 1)  monde)

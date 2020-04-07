@@ -11,9 +11,9 @@
   (prefix-in lux: lux)
   (prefix-in raart: raart))
 
-(struct actor (position mailbox name)#:transparent)
+(struct actor (position mailbox name category)#:transparent)
 
-(define me (actor '(1 2) '((move 3 8) (create 5 5 "1") (move -2 -4)) (fg 'red (raart:text ">>>") )))
+(define me (actor '(1 2) '((move 3 8) (create 5 5 "1") (move -2 -4)) (fg 'red (raart:text ">>>") ) "player"))
 
 (define (name-of-actor actor)
   (actor-name actor))
@@ -24,10 +24,16 @@
 (define (actor-send new-actor new-msg)
   (struct-copy actor new-actor (mailbox (cons new-msg (actor-mailbox new-actor)))))
 
+(define (x-position-top-mail actor)
+  (cadar (actor-mailbox actor)))
+
+(define (y-position-top-mail actor)
+  (caddar (actor-mailbox actor)))
+
 (define (update-position new-actor)
   (struct-copy actor new-actor (position (list
-                                            (+ (car (actor-position new-actor)) (cadar (actor-mailbox new-actor)))
-					                                              (+ (cadr (actor-position new-actor)) (caddar (actor-mailbox new-actor)))))
+                                            (+ (car (actor-position new-actor)) (x-position-top-mail new-actor))
+					                                              (+ (cadr (actor-position new-actor)) (y-position-top-mail new-actor))))
 										                     (mailbox (cdr (actor-mailbox new-actor)))))
 
 (define (actor-update new-actor)
@@ -38,7 +44,7 @@
       [(empty? (actor-mailbox new-actor)) (cons (cons new-actor created-actors) created-messages)]
       [(equal? 'create (caar (actor-mailbox new-actor)))
        (new-actor-update (struct-copy actor new-actor (mailbox (cdr (actor-mailbox new-actor))))
-                         (cons (actor (list (cadar (actor-mailbox new-actor)) (caddar (actor-mailbox new-actor))) '() "created") created-actors) created-messages)]
+                         (cons (actor (list (x-position-top-mail new-actor) (y-position-top-mail new-actor)) '() (fg 'blue (raart:text "created")) "created") created-actors) created-messages)]
         [(equal? 'move (caar (actor-mailbox new-actor)))
          (new-actor-update (update-position new-actor) created-actors created-messages)]
         [(equal? 'message (caar (actor-mailbox new-actor)))
@@ -63,7 +69,7 @@
 (define (collisions? x list_actors)
    (for/or ([i list_actors]) (colliding? x i)))
 
-(provide actor name-of-actor actor-location actor-send actor-update update-position actor-mailbox vactor? location? mailbox? message? new-actor-update colliding? collisions?)
+(provide actor name-of-actor actor-location y-position-top-mail x-position-top-mail actor-send actor-update update-position actor-mailbox vactor? location? mailbox? message? new-actor-update colliding? collisions?)
 
 ;(colliding? me me)
 ;(collisions? me (list me me))

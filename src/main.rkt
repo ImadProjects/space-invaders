@@ -24,7 +24,7 @@
 (define new-world (world '()))
 
 
-(define me (actor '(1 2) '((move 3 8) (move -2 -4)) (fg 'red (raart:text ">>>"))))
+(define me (actor '(1 2) '((move 3 8) (move -2 -4)) (fg 'red (raart:text ">>>")) "player"))
 (define monde (world (list me) ))
 (define rn (runtime monde 1 4))
 

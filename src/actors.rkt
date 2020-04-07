@@ -69,5 +69,5 @@
 ;(collisions? me (list me me))
 ;(collisions? me '())
 
-(define rené (actor '(1 2) '((create 5 5 "1") (move 3 8) (message create 1 1)) "rené"))
-(actor-update rené)
+;(define rené (actor '(1 2) '((create 5 5 "1") (move 3 8) (message create 1 1)) "rené"))
+;(actor-update rené)

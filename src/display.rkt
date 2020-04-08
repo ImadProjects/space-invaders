@@ -3,7 +3,7 @@
 (require "main.rkt")
 (require "world.rkt")
 (require "actors.rkt")
-(define msgs (list '(move 1 2)))
+
 
 (require racket/match
          racket/format
@@ -21,7 +21,7 @@
 (define world-cols cols)
 
 
-(struct display (run)
+(struct MyDisplay (run)
         #:methods lux:gen:word
         [(define (word-fps w)      ;; FPS desired rate
            10.0)
@@ -30,10 +30,12 @@
          (define (word-event w e)  ;; Event Handler
            (match e
              ["q" #f]  ;; Quit the application
+             ["0" (struct-copy MyDisplay w (run (down (MyDisplay-run w)))) ]
+             ["2" (struct-copy MyDisplay w (run (up (MyDisplay-run w)))) ]
              [_   w]   ;; Otherwise do nothing
          ))
          (define (word-output w)      ;; What to display for the application
-           (match-define (display run) w)
+           (match-define (MyDisplay run) w)
        
            (crop 0 cols 0 rows
                  (vappend
@@ -46,32 +48,32 @@
                               (cadr (actor-location actor))
                               (name-of-actor actor ))))))
          (define (word-tick w)        ;; Update function after one tick of time
-           (match-define (display run ) w)
-
+           (match-define (MyDisplay run ) w)
+           (remove-dead-actors (runtime-world run))
            (define msg (list '(move 0 1)))
-           (define run1 (runtime (game run msg 0) 1 4))
-           (display run1))
+           (define run1 (runtime (game run msg 0) 1 (runtime-duree run)))
+           (MyDisplay run1))
          ])
              
            
            
-(provide (struct-out display))
+(provide (struct-out MyDisplay))
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 
 
-(define me (actor '(1 1) '((move 3 8) (move -2 -4)) (fg 'red (raart:text ">"))))
-(define ma (actor '(2 1) '((move 3 8) (move -2 -4)) (fg 'blue (raart:text ">>"))))
-(define mo (actor '(3 1) '((move 3 8) (move -2 -4)) (fg 'green (raart:text ">>>"))))
-(define mi (actor '(4 1) '((move 3 8) (move -2 -4)) (fg 'white (raart:text ">>>>"))))
-(define monde (world (list me ma mo mi) ))
-(define rn (runtime monde 1 4))
+(define me (actor '(1 1) '() (fg 'red (raart:text ">")) "player"))
+(define ma (actor '(2 1) '() (fg 'blue (raart:text ">>")) "player"))
+(define mo (actor '(3 1) '() (fg 'green (raart:text ">>>")) "player"))
+(define mi (actor '(4 1) '() (fg 'white (raart:text ">>>>")) "player"))
+(define monde (world (list me) ))
+(define rn (runtime monde 1 1))
 
 ;; Starter function
 (define (start-application)
   (lux:call-with-chaos
    (raart:make-raart)
-   (lambda () (lux:fiat-lux (display rn ))))
+   (lambda () (lux:fiat-lux (MyDisplay rn ))))
   (void))
 
 (start-application)

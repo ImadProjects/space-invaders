@@ -1,7 +1,7 @@
 all: build
 
 build: 
-		racket src/main.rkt
+		racket src/display.rkt
 
 test:
 	racket src/test-actor.rkt

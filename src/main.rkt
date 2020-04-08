@@ -18,7 +18,10 @@
   (cond
       [(empty? msgs) (runtime-world runtime1) ]
           [(equal? debut (runtime-duree runtime1)) (runtime-world runtime1)]
-	      [else (begin (define newruntime (struct-copy runtime runtime1 (world (update-world (send-to-world (car msgs) (runtime-world runtime1)) (world '()) ))))
+	      [else (begin (define newruntime (struct-copy runtime runtime1
+                                                           (world (update-world (send-to-world (car msgs)
+                                                                                               (runtime-world runtime1))
+                                                                                (world '()) ))))
 	                (game newruntime (cdr msgs) (+ debut (runtime-tick newruntime))))]))
 
 (define new-world (world '()))
@@ -32,3 +35,15 @@
 (game rn '((move 3 8) (move 1 1)) 0)
 
 (provide (struct-out runtime) game)
+
+(define (down run)
+  (null? run)
+  '()
+  (struct-copy runtime run (world (send-to-world '(move 1 0) (runtime-world run)))))
+
+(define (up run)
+  (null? run)
+  '()
+  (struct-copy runtime run (world (send-to-world '(move -1 0) (runtime-world run)))))
+
+(provide up down)

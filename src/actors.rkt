@@ -47,13 +47,23 @@
                          (cons (actor (list (x-position-top-mail new-actor) (y-position-top-mail new-actor))
                                       '()
                                       (fg 'blue (raart:text "*")) "created") created-actors) created-messages)]
+        [(equal? 'move-enemy (caar (actor-mailbox new-actor)))
+         (if (equal? (actor-category new-actor) "enemy")
+             (new-actor-update (update-position new-actor) created-actors created-messages)
+             (new-actor-update (struct-copy actor new-actor (mailbox (cdr (actor-mailbox new-actor)))) created-actors created-messages))]
         [(equal? 'move (caar (actor-mailbox new-actor)))
-         (new-actor-update (update-position new-actor) created-actors created-messages)]
+         (if (equal? (actor-category new-actor) "player")
+             (new-actor-update (update-position new-actor) created-actors created-messages)
+             (new-actor-update (struct-copy actor new-actor (mailbox (cdr (actor-mailbox new-actor)))) created-actors created-messages))]
+        [(equal? 'move-projectile (caar (actor-mailbox new-actor)))
+         (if (equal? (actor-category new-actor) "projectile")
+             (new-actor-update (update-position new-actor) created-actors created-messages)
+             (new-actor-update (struct-copy actor new-actor (mailbox (cdr (actor-mailbox new-actor)))) created-actors created-messages))]
         [(equal? 'message (caar (actor-mailbox new-actor)))
          (new-actor-update (struct-copy actor new-actor (mailbox (cdr (actor-mailbox new-actor))))
                            created-actors (cons (cdar (actor-mailbox new-actor)) created-messages)) ]
 	[else (new-actor-update (actor (actor-position new-actor) (cdr (actor-mailbox new-actor))
-                                       (actor-name new-actor)) created-actors created-messages)]))
+                                       (actor-name new-actor) (actor-category new-actor)) created-actors created-messages)]))
 									
 ;(trace actor-update)
 ;(trace actor-location)

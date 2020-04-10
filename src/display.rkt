@@ -35,7 +35,7 @@
 	     ["&" (struct-copy MyDisplay w (run (time-travel (time 1) (MyDisplay-run w))))]
              ["é" (struct-copy MyDisplay w (run (time-travel (time 2) (MyDisplay-run w))))]
              ["'" (struct-copy MyDisplay w (run (time-travel (time 3) (MyDisplay-run w))))]
-             ["8" (struct-copy MyDisplay w (run (time-travel (time 4) (MyDisplay-run w))))] 
+             ["8" (struct-copy MyDisplay w (run (time-travel (time 8) (MyDisplay-run w))))] 
              [_   w]   ;; Otherwise do nothing
          ))
          (define (word-output w)      ;; What to display for the application

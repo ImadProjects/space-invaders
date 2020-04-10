@@ -32,8 +32,8 @@
              ["q" #f]  ;; Quit the application
              ["0" (struct-copy MyDisplay w (run (down (MyDisplay-run w)))) ]
              ["2" (struct-copy MyDisplay w (run (up (MyDisplay-run w))))]
-	     ["&" (struct-copy MyDisplay w (run (time-travel (time 1) latest-worlds (MyDisplay-run w))))]
-             ["é" (struct-copy MyDisplay w (run (time-travel (time 2) latest-worlds (MyDisplay-run w))))]
+	     ["&" (struct-copy MyDisplay w (run (struct-copy runtime run (world (time-travel (time 1) latest-worlds (MyDisplay-run w))))))]
+             ["é" (struct-copy MyDisplay w (run (struct-copy runtime run (world (time-travel (time 2) latest-worlds (MyDisplay-run w))))))]
              ["'" (struct-copy MyDisplay w (run (time-travel (time 3) latest-worlds (MyDisplay-run w))))]
              ["(" (struct-copy MyDisplay w (run (time-travel (time 4) latest-worlds (MyDisplay-run w))))] 
              [_   w]   ;; Otherwise do nothing

@@ -22,6 +22,8 @@
    (world (newworld msg (world-actors wrd)))))
 
 
+
+
 ;(actor-send me '(move 1 1) )
 ;(send_to_world '(move 1 1)  monde) ; je compare le résultat avec la fonction actor-send
 
@@ -54,8 +56,8 @@
       [else (car ancient-worlds)]))
 
 (provide (struct-out world))
-(provide update-world send-to-world latest-worlds save-world time-travel)
 
+(provide update-world send-to-world remove-dead-actors latest-worlds save-world time-travel)
 
 (define act (actor '(1 2) '() (fg 'red (raart:text ">>>")) "enemy"))
 (define missile (actor '(1 2) '() (fg 'red (raart:text ">>>")) "projectile"))

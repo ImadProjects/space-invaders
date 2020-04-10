@@ -52,7 +52,7 @@
 (define (time-travel n ancient-worlds current-world)
   (cond
       [(or (= n 0) (> n (length ancient-worlds))) current-world]
-      [(>= n 2) (time-travel (sub1 n) (cdr ancient-worlds))]
+      [(>= n 2) (time-travel (sub1 n) (cdr ancient-worlds) current-world)]
       [else (car ancient-worlds)]))
 
 (provide (struct-out world))

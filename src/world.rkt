@@ -63,4 +63,4 @@
 (define missile (actor '(1 2) '() (fg 'red (raart:text ">>>")) "projectile"))
 (define monde (world (list act missile) ))
 ;(remove-dead-actors monde)
-;(send_to_world '(move 1 1)  monde)
+(send-to-world '(move 1 1)  monde)

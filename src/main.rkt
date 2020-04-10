@@ -55,7 +55,7 @@
 (define (time-travel n run)
   (null? run)
   '()
-  (struct-copy runtime run (world (world-travel n latest-worlds (runtime-world run))) (tick 1) (duree 1)))
+  (struct-copy runtime run (world (world-travel n latest-worlds (runtime-world run)))))
 
 
 (provide up down time time-travel)

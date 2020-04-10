@@ -48,8 +48,14 @@
   (struct-copy runtime run (world (send-to-world '(move -1 0) (runtime-world run)))))
 
 (define (time run)
-        (if (and (>= run 1) (< run 9))
-	            run
-		                0))
+  (if (and (>= run 1) (< run 9))
+      run
+      0))
 
-(provide up down time)
+(define (time-travel n run)
+  (null? run)
+  '()
+  (struct-copy runtime run (world (world-travel n latest-worlds (runtime-world run))) (tick 1) (duree 1)))
+
+
+(provide up down time time-travel)

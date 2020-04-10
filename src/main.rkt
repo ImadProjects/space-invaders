@@ -15,13 +15,14 @@
 
 
 (define (game runtime1 msgs debut) ;boucle de jeu
+  (save-world (runtime-world runtime1))
   (cond
       [(empty? msgs) (runtime-world runtime1) ]
-          [(equal? debut (runtime-duree runtime1)) (runtime-world runtime1)]
+      [(equal? debut (runtime-duree runtime1)) (runtime-world runtime1)]
 	      [else (begin (define newruntime (struct-copy runtime runtime1
-                                                           (world (update-world (send-to-world (car msgs)
-                                                                                               (runtime-world runtime1))
-                                                                                (world '()) ))))
+                           (world (update-world (send-to-world (car msgs)
+                                                               (runtime-world runtime1))
+                                                               		      (world '()) ))))
 	                (game newruntime (cdr msgs) (+ debut (runtime-tick newruntime))))]))
 
 (define new-world (world '()))
@@ -46,4 +47,9 @@
   '()
   (struct-copy runtime run (world (send-to-world '(move -1 0) (runtime-world run)))))
 
-(provide up down)
+(define (time run)
+        (if (and (>= run 1) (< run 9))
+	            run
+		                0))
+
+(provide up down time)

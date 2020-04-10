@@ -31,7 +31,8 @@
            (match e
              ["q" #f]  ;; Quit the application
              ["0" (struct-copy MyDisplay w (run (down (MyDisplay-run w)))) ]
-             ["2" (struct-copy MyDisplay w (run (up (MyDisplay-run w)))) ]
+             ["2" (struct-copy MyDisplay w (run (up (MyDisplay-run w))))]
+	     ["&" (struct-copy MyDisplay w (run (time-travel (time 1))))]                        ["é" (struct-copy MyDisplay w (run (time-travel (time 2))))]                        ["'" (struct-copy MyDisplay w (run (time-travel (time 3))))]                        ["(" (struct-copy MyDisplay w (run (time-travel (time 4))))] 
              [_   w]   ;; Otherwise do nothing
          ))
          (define (word-output w)      ;; What to display for the application

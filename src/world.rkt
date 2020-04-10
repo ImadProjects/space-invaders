@@ -43,17 +43,18 @@
 (define latest-worlds '())
 
 (define (save-world w)
-  (if (<= (length latest-worlds) 10)
+  (if (<= (length latest-worlds) 9)
         (set! latest-worlds (cons w latest-worlds))
-	      (set! latest-worlds (cons w (reverse (cdr (reverse latest-worlds)))))))
+	(set! latest-worlds (cons w (reverse (cdr (reverse latest-worlds)))))))
 
-(define (time-travel n ancient-worlds)
-  (if (>= n 2)
-        (time-travel (sub1 n) (cdr ancient-worlds))
-	      (car ancient-worlds)))
+(define (time-travel n ancient-worlds current-world)
+  (cond
+      [(or (= n 0) (> n (length ancient-worlds))) current-world]
+      [(>= n 2) (time-travel (sub1 n) (cdr ancient-worlds))]
+      [else (car ancient-worlds)]))
 
 (provide (struct-out world))
-(provide update-world send-to-world )
+(provide update-world send-to-world latest-worlds save-world time-travel)
 
 
 (define act (actor '(1 2) '() (fg 'red (raart:text ">>>")) "enemy"))

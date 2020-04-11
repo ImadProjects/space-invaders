@@ -30,10 +30,15 @@
          (define (word-event w e)  ;; Event Handler
            (match e
              ["q" #f]  ;; Quit the application
-             ["0" (struct-copy MyDisplay w (run (down (MyDisplay-run w)))) ]
-             ["2" (struct-copy MyDisplay w (run (up (MyDisplay-run w))))]
+             ["<down>" (struct-copy MyDisplay w (run (down (MyDisplay-run w)))) ]
+             ["<up>" (struct-copy MyDisplay w (run (up (MyDisplay-run w))))]
 	     ["&" (struct-copy MyDisplay w (run (time-travel (time 1) (MyDisplay-run w))))]
              ["é" (struct-copy MyDisplay w (run (time-travel (time 2) (MyDisplay-run w))))]
+
+             [" " (struct-copy MyDisplay w (run (shoot (MyDisplay-run w) 
+             (car (actor-location (car (world-actors (runtime-world (MyDisplay-run w) ))))) 
+             (cadr (actor-location (car (world-actors (runtime-world (MyDisplay-run w) ))))))))]
+
              ["'" (struct-copy MyDisplay w (run (time-travel (time 3) (MyDisplay-run w))))]
              ["8" (struct-copy MyDisplay w (run (time-travel (time 8) (MyDisplay-run w))))] 
              [_   w]   ;; Otherwise do nothing
@@ -54,7 +59,7 @@
          (define (word-tick w)        ;; Update function after one tick of time
            (match-define (MyDisplay run ) w)
            (remove-dead-actors (runtime-world run))
-           (define msg (list '(move 0 1)))
+           (define msg (list '(move-enemy 0 1) '(move 0 1)))
            (define run1 (runtime (game run msg 0) 1 (runtime-duree run)))
            (MyDisplay run1))
          ])
@@ -67,10 +72,10 @@
 
 
 (define me (actor '(1 1) '() (fg 'red (raart:text ">")) "player"))
-(define ma (actor '(2 1) '() (fg 'blue (raart:text ">>")) "player"))
-(define mo (actor '(3 1) '() (fg 'green (raart:text ">>>")) "player"))
-(define mi (actor '(4 1) '() (fg 'white (raart:text ">>>>")) "player"))
-(define monde (world (list me) ))
+(define ma (actor '(2 1) '() (fg 'blue (raart:text ">>")) "enemy"))
+(define mo (actor '(3 1) '() (fg 'green (raart:text ">>>")) "enemy"))
+(define mi (actor '(4 1) '() (fg 'white (raart:text ">>>>")) "enemy"))
+(define monde (world (list me ma mo mi) ))
 (define rn (runtime monde 1 1))
 
 ;; Starter function

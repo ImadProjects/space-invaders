@@ -9,7 +9,7 @@
   (prefix-in ct: charterm)
   (prefix-in lux: lux)
   (prefix-in raart: raart))
-(require "actors.rkt")
+(require "actors.rkt" )
 
 (struct world (actors) #:transparent)
 
@@ -63,4 +63,4 @@
 (define missile (actor '(1 2) '() (fg 'red (raart:text ">>>")) "projectile"))
 (define monde (world (list act missile) ))
 ;(remove-dead-actors monde)
-(send-to-world '(move 1 1)  monde)
+;(send-to-world '(move 1 1)  monde)

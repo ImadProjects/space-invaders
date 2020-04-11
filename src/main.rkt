@@ -28,12 +28,6 @@
 (define new-world (world '()))
 
 
-(define me (actor '(1 2) '((move 3 8) (move -2 -4)) (fg 'red (raart:text ">>>")) "player"))
-(define monde (world (list me) ))
-(define rn (runtime monde 1 4))
-
-;(game rn '((move 3 8)) 0)
-(game rn '((move 3 8) (move 1 1)) 0)
 
 (provide (struct-out runtime) game)
 
@@ -47,6 +41,12 @@
   '()
   (struct-copy runtime run (world (send-to-world '(move -1 0) (runtime-world run)))))
 
+(define (shoot run p pp)
+  (null? run)
+  '()
+  (struct-copy runtime run (world (send-to-world (list 'create  p (add1 pp) "1") (runtime-world run)))))
+
+
 (define (time run)
   (if (and (>= run 1) (< run 9))
       run
@@ -58,4 +58,21 @@
   (struct-copy runtime run (world (world-travel n latest-worlds (runtime-world run)))))
 
 
-(provide up down time time-travel)
+(provide up down shoot time time-travel)
+
+
+(define act (actor '(1 2) '() (fg 'red (raart:text ">>>")) "enemy"))
+(define missile (actor '(1 2) '() (fg 'red (raart:text ">>>")) "projectile"))
+
+(define me (actor '(1 2) '((move 3 8) (move -2 -4)) (fg 'red (raart:text ">>>")) "player"))
+(define monde (world (list me) ))
+(define rn (runtime monde 1 4))
+
+;(game rn '((move 3 8)) 0)
+;(game rn '((move 3 8) (move 1 1)) 0)
+
+;(remove-dead-actors monde)
+;(send-to-world '(move 1 1)  monde)
+
+;(shoot rn 2)
+;(update-world  monde new-world); faire jouer les acteurs

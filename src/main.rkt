@@ -44,7 +44,7 @@
 (define (shoot run p pp)
   (null? run)
   '()
-  (struct-copy runtime run (world (send-to-world (list 'create  p (add1 pp) "1") (runtime-world run)))))
+  (struct-copy runtime run (world (send-to-world (list 'create  p (+ 3 pp) "1") (runtime-world run)))))
 
 
 (define (time run)

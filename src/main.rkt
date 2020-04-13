@@ -56,6 +56,12 @@
   (struct-copy runtime run (world (send-to-world (list 'create  (car (actor-location (car (world-player (runtime-world run))))) (+ p (cadr (actor-location (car (world-player (runtime-world run))))))  "projectile") (runtime-world run)))))
 
 
+(define (in-window? w)
+  (define enemies (world (world-enemies (runtime-world w))))
+  (for/and ([i (world-actors enemies)])
+    (not (equal? 2 (cadr (actor-location i))))))
+
+
 (define (time run)
   (if (and (>= run 1) (< run 9))
       run
@@ -67,14 +73,14 @@
   (struct-copy runtime run (world (world-travel n latest-worlds (runtime-world run)))))
 
 
-(provide up down left right shoot time time-travel)
+(provide in-window? up down left right shoot time time-travel)
 
 
-(define act (actor '(1 2) '() (fg 'red (raart:text ">>>")) "enemy"))
+(define act (actor '(1 1) '() (fg 'red (raart:text ">>>")) "enemy"))
 (define missile (actor '(1 2) '() (fg 'red (raart:text ">>>")) "projectile"))
 
 (define me (actor '(1 2) '((move 3 8) (move -2 -4)) (fg 'red (raart:text ">>>")) "player"))
-(define monde (world (list me) ))
+(define monde (world (list me act) ))
 (define rn (runtime monde 1 4))
 
 ;(game rn '((move 3 8)) 0)
@@ -88,3 +94,5 @@
 
 ;(shoot rn)
 ;(actor-location me)
+
+(in-window? rn)

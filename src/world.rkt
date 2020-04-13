@@ -97,7 +97,7 @@
 
 (provide (struct-out world))
 
-(provide update-world send-to-world remove-dead-actors latest-worlds save-world world-travel world-player)
+(provide world-enemies update-world send-to-world remove-dead-actors latest-worlds save-world world-travel world-player)
 
 (define act (actor '(3 2) '() (fg 'red (raart:text ">>>")) "enemy"))
 (define ac (actor '(3 2) '() (fg 'red (raart:text ">>>")) "player"))

@@ -20,6 +20,9 @@
 (define world-rows (- rows 3))
 (define world-cols cols)
 
+(define-values (term-cols term-rows)
+  (ct:with-charterm (ct:charterm-screen-size)))
+
 
 (struct MyDisplay (run pos) ;pos: position du curseur ou du dernier missile tiré ? à revoir 
         #:methods lux:gen:word
@@ -58,12 +61,17 @@
                     (place-at c
                               (car (actor-location actor))
                               (cadr (actor-location actor))
-                              (name-of-actor actor ))))))
+                              (name-of-actor actor )))))  )        
          (define (word-tick w)        ;; Update function after one tick of time
            (match-define (MyDisplay run pos) w)
-           (define msg (list '(move-enemy 0 -1) '(move 0 1)))
-           (define run1 (runtime (game run msg 0) 1 (runtime-duree run)))
-           (MyDisplay run1 (MyDisplay-pos w)))
+          (define msg1 (list '(move-enemy 0 -1) '(move 0 1)))
+          (define msg2 (list '(move-enemy 0 75) '(move 0 1)))
+           (define run1 (runtime (game run msg1 0) 1 (runtime-duree run))) ;Pour les acteurs qui ne sont pas morts on les fait revenir de l'autre coté
+            (define run2 (runtime (game run msg2 0) 1 (runtime-duree run)))
+
+            (if (in-window? (MyDisplay-run w))
+                (MyDisplay run1 (MyDisplay-pos w))
+                (MyDisplay run2 (MyDisplay-pos w))))
          ])
              
            

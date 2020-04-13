@@ -64,6 +64,11 @@
       #t
       #f))
 
+(define (player? act)
+  (if (equal? "player" (actor-category act))
+      #t
+      #f))
+
 (define (missile? act)
   (if (equal? "projectile" (actor-category act))
       #t
@@ -71,6 +76,9 @@
 
 (define (world-enemies w)
   (filter enemy? (world-actors w)))
+
+ (define (world-player w)
+  (filter player? (world-actors w))) 
 
 (define (world-projectiles w)
   (filter missile? (world-actors w)))
@@ -89,24 +97,24 @@
 
 (provide (struct-out world))
 
-(provide update-world send-to-world remove-dead-actors latest-worlds save-world world-travel)
+(provide update-world send-to-world remove-dead-actors latest-worlds save-world world-travel world-player)
 
 (define act (actor '(3 2) '() (fg 'red (raart:text ">>>")) "enemy"))
-(define ac (actor '(3 2) '() (fg 'red (raart:text ">>>")) "enemy"))
+(define ac (actor '(3 2) '() (fg 'red (raart:text ">>>")) "player"))
 
 (define missile (actor '(4 2) '() (fg 'red (raart:text ">>>")) "projectile"))
 (define monde (world (list missile ac act  ) ))
 ;(actor-alive? act monde)
-(display (remove-dead-actors monde))
-(send-to-world '(move 1 1)  monde)
+;(display (remove-dead-actors monde))
+;(send-to-world '(move 1 1)  monde)
 (define nw (world '()))
-(update-world monde nw)
+;(update-world monde nw)
 ;(world-enemies monde)
 ;(enemy? missile)
 ;(world-enemies monde)
-  (define enemies (world (world-enemies monde)))
+  (define player (world (world-player monde)))
   (define projectiles (world (world-projectiles monde)))
-; (display enemies)
+ (display player)
  ; (display projectiles)
 ;(any-collision? monde)
 ;(collisions? missile (world-actors enemies) )

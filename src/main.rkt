@@ -50,10 +50,10 @@
   '()
   (struct-copy runtime run (world (send-to-world '(move 0 1) (runtime-world run)))))
 
-(define (shoot run p pp)
+(define (shoot run p)
   (null? run)
   '()
-  (struct-copy runtime run (world (send-to-world (list 'create  p (+ 3 pp) "projectile") (runtime-world run)))))
+  (struct-copy runtime run (world (send-to-world (list 'create  (car (actor-location (car (world-player (runtime-world run))))) (+ p (cadr (actor-location (car (world-player (runtime-world run))))))  "projectile") (runtime-world run)))))
 
 
 (define (time run)
@@ -85,3 +85,6 @@
 
 ;(shoot rn 2)
 ;(update-world  monde new-world); faire jouer les acteurs
+
+;(shoot rn)
+;(actor-location me)

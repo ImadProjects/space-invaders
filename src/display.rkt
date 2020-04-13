@@ -30,20 +30,17 @@
          (define (word-event w e)  ;; Event Handler
            (match e
              ["q" #f]  ;; Quit the application
-             ["<down>" (struct-copy MyDisplay w (run (down (MyDisplay-run w))) (pos  (list  (add1 (car (actor-location (car (world-actors (runtime-world (MyDisplay-run w) ))))))  
-             (car (actor-location (car (world-actors (runtime-world (MyDisplay-run w) ))))))
-)) ]
+             ["<down>" (struct-copy MyDisplay w (run (down (MyDisplay-run w))) )]
              ["<up>" (struct-copy MyDisplay w (run (up (MyDisplay-run w))))]
-              ["<left>" (struct-copy MyDisplay w (run (left (MyDisplay-run w))))]
+
+              ["<left>" (struct-copy MyDisplay w (run (left (MyDisplay-run w)))  )]
                 ["<right>" (struct-copy MyDisplay w (run (right (MyDisplay-run w))))]
 
 	     ["&" (struct-copy MyDisplay w (run (time-travel (time 1) (MyDisplay-run w))))]
              ["é" (struct-copy MyDisplay w (run (time-travel (time 2) (MyDisplay-run w))))]
 
-             [" " (struct-copy MyDisplay w (run (shoot (MyDisplay-run w) 
-               (car (MyDisplay-pos w))
-         (cadr (actor-location (car (world-actors (runtime-world (MyDisplay-run w) )))))
-             )))]
+             [" " (struct-copy MyDisplay w (run (shoot (MyDisplay-run w) (MyDisplay-pos w))) (pos (+ 3 (MyDisplay-pos w))))
+           ]
 
              ["'" (struct-copy MyDisplay w (run (time-travel (time 3) (MyDisplay-run w))))]
              ["8" (struct-copy MyDisplay w (run (time-travel (time 8) (MyDisplay-run w))))] 
@@ -66,7 +63,7 @@
            (match-define (MyDisplay run pos) w)
            (define msg (list '(move-enemy 0 -1) '(move 0 1)))
            (define run1 (runtime (game run msg 0) 1 (runtime-duree run)))
-           (MyDisplay run1 '(4 10)))
+           (MyDisplay run1 (MyDisplay-pos w)))
          ])
              
            
@@ -91,7 +88,7 @@
 (define (start-application)
   (lux:call-with-chaos
    (raart:make-raart)
-   (lambda () (lux:fiat-lux (MyDisplay rn '(1 2)))))
+   (lambda () (lux:fiat-lux (MyDisplay rn 0))))
   (void))
 
 (start-application)

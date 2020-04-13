@@ -30,8 +30,8 @@
          (define (word-event w e)  ;; Event Handler
            (match e
              ["q" #f]  ;; Quit the application
-             ["<down>" (struct-copy MyDisplay w (run (down (MyDisplay-run w))) )]
-             ["<up>" (struct-copy MyDisplay w (run (up (MyDisplay-run w))))]
+             ["<down>" (struct-copy MyDisplay w (run (down (MyDisplay-run w))) (pos 1))]
+             ["<up>" (struct-copy MyDisplay w (run (up (MyDisplay-run w))) (pos 1))]
 
               ["<left>" (struct-copy MyDisplay w (run (left (MyDisplay-run w)))  )]
                 ["<right>" (struct-copy MyDisplay w (run (right (MyDisplay-run w))))]
@@ -88,7 +88,7 @@
 (define (start-application)
   (lux:call-with-chaos
    (raart:make-raart)
-   (lambda () (lux:fiat-lux (MyDisplay rn 0))))
+   (lambda () (lux:fiat-lux (MyDisplay rn 1))))
   (void))
 
 (start-application)

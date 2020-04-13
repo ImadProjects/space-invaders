@@ -82,14 +82,21 @@
   (if (equal? (actor-position actor1) (actor-position actor2))
   #t
   #f))
-(define (collisions? x list_actors)
-   (for/or ([i list_actors]) (colliding? x i)))
+(define (collisions? x list-actors)
+   (for/or ([i list-actors]) (colliding? x i)))
 
-(provide actor name-of-actor actor-location y-position-top-mail x-position-top-mail actor-send actor-update update-position actor-mailbox vactor? location? mailbox? message? new-actor-update colliding? collisions?)
+(provide actor name-of-actor actor-location collisions? actor-category y-position-top-mail x-position-top-mail actor-send actor-update update-position actor-mailbox vactor? location? mailbox? message? new-actor-update colliding? collisions?)
+
+
+
+(define mc (actor '(5 4) '((move 3 8) (create 5 5 "1") (move -2 -4)) (fg 'red (raart:text ">>>") ) "player"))
 
 ;(colliding? me me)
-;(collisions? me (list me me))
+;(collisions? me (list mc mc))
 ;(collisions? me '())
 
+;(colliding? me mc)
+
+;(any-collision? (list me mc))
 ;(define rené (actor '(1 2) '((create 5 5 "1") (move 3 8) (message create 1 1)) "rené"))
 ;(actor-update rené)

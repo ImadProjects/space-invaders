@@ -41,10 +41,19 @@
   '()
   (struct-copy runtime run (world (send-to-world '(move -1 0) (runtime-world run)))))
 
+(define (left run)
+  (null? run)
+  '()
+  (struct-copy runtime run (world (send-to-world '(move 0 -1) (runtime-world run)))))
+(define (right run)
+  (null? run)
+  '()
+  (struct-copy runtime run (world (send-to-world '(move 0 1) (runtime-world run)))))
+
 (define (shoot run p pp)
   (null? run)
   '()
-  (struct-copy runtime run (world (send-to-world (list 'create  p (+ 3 pp) "1") (runtime-world run)))))
+  (struct-copy runtime run (world (send-to-world (list 'create  p (+ 3 pp) "projectile") (runtime-world run)))))
 
 
 (define (time run)
@@ -58,7 +67,7 @@
   (struct-copy runtime run (world (world-travel n latest-worlds (runtime-world run)))))
 
 
-(provide up down shoot time time-travel)
+(provide up down left right shoot time time-travel)
 
 
 (define act (actor '(1 2) '() (fg 'red (raart:text ">>>")) "enemy"))

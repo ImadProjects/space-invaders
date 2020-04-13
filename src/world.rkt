@@ -29,7 +29,7 @@
 
 (define (update-world w nw)
   (if (empty? (world-actors w))
-        nw
+        (remove-dead-actors nw)
 	      (update-world (struct-copy world w (actors (cdr (world-actors w)))) (world (append (car (actor-update (car (world-actors w)))) (world-actors nw))))))
 ;(update-world  monde new-world)
 
@@ -37,7 +37,7 @@
 
 (define (remove-dead-actors w)
   (define (actors_alive? x)
-    (not (collisions? x (world-actors w))))
+    (not (collisions? x (world-projectiles w))))
   (define p (world  
          (filter actors_alive?  (world-actors w))))
          p)
@@ -55,12 +55,58 @@
       [(>= n 2) (world-travel (sub1 n) (cdr ancient-worlds) current-world)]
       [else (car ancient-worlds)]))
 
+
+(define (actor-alive? x w)
+    (not (collisions? x (world-actors w))))
+
+(define (enemy? act)
+  (if (equal? "enemy" (actor-category act))
+      #t
+      #f))
+
+(define (missile? act)
+  (if (equal? "projectile" (actor-category act))
+      #t
+      #f))
+
+(define (world-enemies w)
+  (filter enemy? (world-actors w)))
+
+(define (world-projectiles w)
+  (filter missile? (world-actors w)))
+
+
+
+(define (any-collision? w)
+  (define enemies (world (world-enemies w)))
+  (define projectiles (world (world-projectiles w)))
+  (for/or ([i (world-actors projectiles)])
+    (collisions? i (world-actors enemies)))) 
+
+  
+
+
+
 (provide (struct-out world))
 
 (provide update-world send-to-world remove-dead-actors latest-worlds save-world world-travel)
 
-(define act (actor '(1 2) '() (fg 'red (raart:text ">>>")) "enemy"))
-(define missile (actor '(1 2) '() (fg 'red (raart:text ">>>")) "projectile"))
-(define monde (world (list act missile) ))
-;(remove-dead-actors monde)
-;(send-to-world '(move 1 1)  monde)
+(define act (actor '(3 2) '() (fg 'red (raart:text ">>>")) "enemy"))
+(define ac (actor '(3 2) '() (fg 'red (raart:text ">>>")) "enemy"))
+
+(define missile (actor '(4 2) '() (fg 'red (raart:text ">>>")) "projectile"))
+(define monde (world (list missile ac act  ) ))
+;(actor-alive? act monde)
+(display (remove-dead-actors monde))
+(send-to-world '(move 1 1)  monde)
+(define nw (world '()))
+(update-world monde nw)
+;(world-enemies monde)
+;(enemy? missile)
+;(world-enemies monde)
+  (define enemies (world (world-enemies monde)))
+  (define projectiles (world (world-projectiles monde)))
+; (display enemies)
+ ; (display projectiles)
+;(any-collision? monde)
+;(collisions? missile (world-actors enemies) )

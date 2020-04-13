@@ -34,6 +34,9 @@
              (car (actor-location (car (world-actors (runtime-world (MyDisplay-run w) ))))))
 )) ]
              ["<up>" (struct-copy MyDisplay w (run (up (MyDisplay-run w))))]
+              ["<left>" (struct-copy MyDisplay w (run (left (MyDisplay-run w))))]
+                ["<right>" (struct-copy MyDisplay w (run (right (MyDisplay-run w))))]
+
 	     ["&" (struct-copy MyDisplay w (run (time-travel (time 1) (MyDisplay-run w))))]
              ["é" (struct-copy MyDisplay w (run (time-travel (time 2) (MyDisplay-run w))))]
 
@@ -61,7 +64,6 @@
                               (name-of-actor actor ))))))
          (define (word-tick w)        ;; Update function after one tick of time
            (match-define (MyDisplay run pos) w)
-           (remove-dead-actors (runtime-world run))
            (define msg (list '(move-enemy 0 -1) '(move 0 1)))
            (define run1 (runtime (game run msg 0) 1 (runtime-duree run)))
            (MyDisplay run1 '(4 10)))

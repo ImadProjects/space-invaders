@@ -39,19 +39,19 @@
               ["<left>" (struct-copy MyDisplay w (run (left (MyDisplay-run w)))  )]
                 ["<right>" (struct-copy MyDisplay w (run (right (MyDisplay-run w))))]
 
-	     ["&" (struct-copy MyDisplay w (run (time-travel-runtime (time 1) latest-runtimes (MyDisplay-run w))))]
-             ["é" (struct-copy MyDisplay w (run (time-travel (time 2) (MyDisplay-run w))))]
+	     ["&" (struct-copy MyDisplay w (run (time-travel-runtime (time 5) latest-runtimes (MyDisplay-run w))))]
+             ["é" (struct-copy MyDisplay w (run (time-travel (time 2) latest-worlds (MyDisplay-run w))))]
 
              [" " (struct-copy MyDisplay w (run (shoot (MyDisplay-run w) (MyDisplay-pos w))) (pos (+ 3 (MyDisplay-pos w))))
            ]
 
-             ["'" (struct-copy MyDisplay w (run (time-travel (time 3) (MyDisplay-run w))))]
-             ["8" (struct-copy MyDisplay w (run (time-travel (time 8) (MyDisplay-run w))))] 
+             ["'" (struct-copy MyDisplay w (run (time-travel (time 3) latest-worlds (MyDisplay-run w))))]
+             ["8" (struct-copy MyDisplay w (run (time-travel (time 8) latest-worlds (MyDisplay-run w))))] 
              [_   w]   ;; Otherwise do nothing
          ))
          (define (word-output w)      ;; What to display for the application
            (match-define (MyDisplay run pos) w)
-       
+           
            (crop 0 cols 0 rows
                  (vappend
                   #:halign 'left
@@ -64,14 +64,14 @@
                               (name-of-actor actor )))))  )        
          (define (word-tick w)        ;; Update function after one tick of time
            (match-define (MyDisplay run pos) w)
-          (define msg1 (list '(move-enemy 0 -1) '(move 0 1)))
-          (define msg2 (list '(move-enemy 0 75) '(move 0 1)))
+           (define msg1 (list '(move-enemy 0 -1) '(move 0 1) '(move 1 1) '(move 2 2)))
+           (define msg2 (list '(move-enemy 0 75) '(move 0 1)))
            (define run1 (runtime (game run msg1 0) 1 (runtime-duree run))) ;Pour les acteurs qui ne sont pas morts on les fait revenir de l'autre coté
-            (define run2 (runtime (game run msg2 0) 1 (runtime-duree run)))
+           (define run2 (runtime (game run msg2 0) 1 (runtime-duree run)))
 
-            (if (in-window? (MyDisplay-run w))
-                (MyDisplay run1 (MyDisplay-pos w))
-                (MyDisplay run2 (MyDisplay-pos w))))
+           (if (in-window? (MyDisplay-run w))
+               (MyDisplay run1 (MyDisplay-pos w))
+               (MyDisplay run2 (MyDisplay-pos w))))
          ])
              
            

@@ -119,17 +119,5 @@
 ;(any-collision? monde)
 ;(collisions? missile (world-actors enemies) )
 
-(define latest-runtimes '())
 
-(define (save-runtimes r)
-  (if (<= (length latest-worlds) 10)
-        (set! latest-runtimes (cons r latest-runtimes))
-	      (set! latest-runtimes (cons r (reverse (cdr (reverse latest-runtimes)))))))
 
-(define (time-travel-runtime n ancient-runtimes current-runtime)
-  (cond
-      [(or (= n 0) (> n (length ancient-runtimes))) current-runtime]
-          [(>= n 2) (time-travel (sub1 n) (cdr ancient-runtimes) current-runtime)]
-	      [else (car ancient-runtimes)]))
-
-(provide latest-runtimes save-runtime time-travel-runtime)

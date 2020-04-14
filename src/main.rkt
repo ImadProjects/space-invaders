@@ -19,11 +19,11 @@
   (cond
       [(empty? msgs) (runtime-world runtime1) ]
       [(equal? debut (runtime-duree runtime1)) (runtime-world runtime1)]
-	      [else (begin (define newruntime (struct-copy runtime runtime1
+      [else (begin (define newruntime (struct-copy runtime runtime1
                            (world (update-world (send-to-world (car msgs)
                                                                (runtime-world runtime1))
-                                                               		      (world '()) ))))
-	                (game newruntime (cdr msgs) (+ debut (runtime-tick newruntime))))]))
+                                                (world '()) ))))
+                   (game newruntime (cdr msgs) (+ debut (runtime-tick newruntime))))]))
 
 (define new-world (world '()))
 
@@ -61,6 +61,7 @@
   (for/and ([i (world-actors enemies)])
     (not (equal? 2 (cadr (actor-location i))))))
 
+(define latest-runtimes '())
 
 (define (time run)
   (if (and (>= run 1) (< run 9))
@@ -72,6 +73,21 @@
   '()
   (struct-copy runtime run (world (world-travel n latest-worlds (runtime-world run)))))
 
+
+(define (save-runtimes r)
+  (if (<= (length latest-worlds) 10)
+        (set! latest-runtimes (cons r latest-runtimes))
+	      (set! latest-runtimes (cons r (reverse (cdr (reverse latest-runtimes)))))))
+
+(define (empty-mailbox actor1)
+  (struct-copy actor actor1 (mailbox '())))
+(define (time-travel-runtime n ancient-runtimes current-runtime)
+  (cond     [(or (= n 0) (> n (length ancient-runtimes))) current-runtime]
+            [(>= n 2) (time-travel-runtime (sub1 n) (cdr ancient-runtimes) current-runtime)]
+            [else (begin (map empty-mailbox (world-actors (runtime-world current-runtime))
+                              (car ancient-runtimes))) ]))
+
+(provide latest-runtimes save-runtimes time-travel-runtime)
 
 (provide in-window? up down left right shoot time time-travel)
 

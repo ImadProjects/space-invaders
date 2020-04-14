@@ -39,7 +39,7 @@
               ["<left>" (struct-copy MyDisplay w (run (left (MyDisplay-run w)))  )]
                 ["<right>" (struct-copy MyDisplay w (run (right (MyDisplay-run w))))]
 
-	     ["&" (struct-copy MyDisplay w (run (time-travel (time 1) (MyDisplay-run w))))]
+	     ["&" (struct-copy MyDisplay w (run (time-travel-runtime (time 1) latest-runtimes (MyDisplay-run w))))]
              ["é" (struct-copy MyDisplay w (run (time-travel (time 2) (MyDisplay-run w))))]
 
              [" " (struct-copy MyDisplay w (run (shoot (MyDisplay-run w) (MyDisplay-pos w))) (pos (+ 3 (MyDisplay-pos w))))

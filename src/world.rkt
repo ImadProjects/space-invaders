@@ -131,3 +131,5 @@
       [(or (= n 0) (> n (length ancient-runtimes))) current-runtime]
           [(>= n 2) (time-travel (sub1 n) (cdr ancient-runtimes) current-runtime)]
 	      [else (car ancient-runtimes)]))
+
+(provide latest-runtimes save-runtime time-travel-runtime)

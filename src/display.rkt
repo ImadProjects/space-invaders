@@ -42,7 +42,7 @@
 	     ["&" (struct-copy MyDisplay w (run (time-travel-runtime (time 5) latest-runtimes (MyDisplay-run w))))]
              ["é" (struct-copy MyDisplay w (run (time-travel (time 2) latest-worlds (MyDisplay-run w))))]
 
-             [" " (struct-copy MyDisplay w (run (shoot (MyDisplay-run w) (MyDisplay-pos w))) (pos (+ 3 (MyDisplay-pos w))))
+             [" " (struct-copy MyDisplay w (run (shoot (MyDisplay-run w) (MyDisplay-pos w))) (pos (+ 0 (MyDisplay-pos w))))
            ]
 
              ["'" (struct-copy MyDisplay w (run (time-travel (time 3) latest-worlds (MyDisplay-run w))))]
@@ -64,7 +64,7 @@
                               (name-of-actor actor )))))  )        
          (define (word-tick w)        ;; Update function after one tick of time
            (match-define (MyDisplay run pos) w)
-           (define msg1 (list '(move-enemy 0 -1) '(move 0 1) '(move 1 1) '(move 2 2)))
+           (define msg1 (list '(move-projectile 0 1) '(move 0 1) '(move 1 1) '(move 2 2)))
            (define msg2 (list '(move-enemy 0 75) '(move 0 1)))
            (define run1 (runtime (game run msg1 0) 1 (runtime-duree run))) ;Pour les acteurs qui ne sont pas morts on les fait revenir de l'autre coté
            (define run2 (runtime (game run msg2 0) 1 (runtime-duree run)))
@@ -82,9 +82,9 @@
 
 
 (define me (actor '(4 10) '() (fg 'red (raart:text ">")) "player"))
-(define ma (actor '(2 75) '() (fg 'blue (raart:text "<<")) "enemy"))
+(define ma (actor '(4 19) '() (fg 'blue (raart:text "*")) "projectile"))
 (define mo (actor '(3 75) '() (fg 'green (raart:text "<<<")) "enemy"))
-(define mi (actor '(4 75) '() (fg 'white (raart:text "<<<")) "enemy"))
+(define mi (actor '(4 55) '() (fg 'white (raart:text "<<<")) "enemy"))
 (define m1 (actor '(5 75) '() (fg 'white (raart:text "<<<")) "enemy"))
 (define m2 (actor '(6 75) '() (fg 'white (raart:text "<<<")) "enemy"))
 (define m3 (actor '(7 75) '() (fg 'white (raart:text "<<<")) "enemy"))

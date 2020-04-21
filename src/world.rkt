@@ -37,7 +37,7 @@
 
 (define (remove-dead-actors w)
   (define (actors_alive? x)
-    (not (collisions? x (world-projectiles w))))
+    (not (collisions? x (actor-beside-pos x w))))
   (define p (world  
          (filter actors_alive?  (world-actors w))))
          p)
@@ -54,6 +54,10 @@
       [(or (= n 0) (> n (length ancient-worlds))) current-world]
       [(>= n 2) (world-travel (sub1 n) (cdr ancient-worlds) current-world)]
       [else (car ancient-worlds)]))
+
+
+(define (actor-beside-pos a w)
+(filter (lambda (x) (not (equal? (car (actor-location a)) (car (actor-location x))))) (world-actors w)))
 
 
 (define (actor-alive? x w)
@@ -85,12 +89,6 @@
 
 
 
-(define (any-collision? w)
-  (define enemies (world (world-enemies w)))
-  (define projectiles (world (world-projectiles w)))
-  (for/or ([i (world-actors projectiles)])
-    (collisions? i (world-actors enemies)))) 
-
   
 
 
@@ -114,7 +112,9 @@
 ;(world-enemies monde)
   (define player (world (world-player monde)))
   (define projectiles (world (world-projectiles monde)))
- (display player)
+ ;(display (update-world (send-to-world '(move-projectile 1 1)  monde ) nw))
+(actor-beside-pos ac monde)
+
  ; (display projectiles)
 ;(any-collision? monde)
 ;(collisions? missile (world-actors enemies) )

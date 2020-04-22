@@ -107,10 +107,27 @@
                                 (world-actors w)))))
 
 
+;;;;;;;;;;;;;;;; Generate enemies ;;;;;;;;;;;;;;;;
+(define (generate tick)
+  (if (not (zero? (remainder tick 5))) '()
+  (letrec ([generateN (lambda (generated n)
+                       (cond
+                        [(zero? n)
+                           generated]
+                        [(zero? (remainder n 2)) (generateN generated (sub1 n))]
+                        [else (generateN (cons (actor (list n 60) '() (fg 'green (raart:text "<<")) "enemy")
+                                           generated)
+                                     (sub1 n))] ))])
+    (generateN '() 20))))
+  
+                     
+
+
 
 ;;;;;;;;;;;;;;;;;;;; Provide ;;;;;;;;;;;;;;;;;;;
 (provide (struct-out world))
 (provide send-world update-world execute-msg
          shoot save-world world-travel
          world-filter world-alive
-         actor-alive?) 
+         actor-alive?
+         generate) 

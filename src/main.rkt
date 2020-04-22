@@ -13,14 +13,14 @@
   (prefix-in lux: lux)
   (prefix-in raart: raart))
 
-(define rows 24)
-(define cols 80)
+(define rows 80)
+(define cols 120)
 (define world-rows (- rows 3))
 (define world-cols cols)
 
 
 
-(struct runtime (world0) ;pos: position du curseur ou du dernier missile tiré ? à revoir 
+(struct runtime (world0 tick) ;pos: position du curseur ou du dernier missile tiré ? à revoir 
         #:methods lux:gen:word
         [(define (word-fps w)      ;; FPS desired rate
            10.0)
@@ -40,7 +40,7 @@
              [_  w]   ;; Otherwise do nothing
          ))
          (define (word-output w)      ;; What to display for the application
-           (match-define (runtime world0) w)
+           (match-define (runtime world0 tick) w)
            
            (crop 0 cols 0 rows
                  (vappend
@@ -53,11 +53,13 @@
                               (cadr (actor-location actor))
                               (name-of-actor actor )))))  )        
          (define (word-tick w)        ;; Update function after one tick of time
-           (match-define (runtime world0) w)
+           (match-define (runtime world0 tick) w)
            (save-world (runtime-world0 w))
-           (define mon (execute-msg (world-alive (runtime-world0 w)) '(move 0 0) "enemy"))
+           (define mo (execute-msg (world-alive (runtime-world0 w)) '(move 0 0) "enemy"))
+           (define mon (struct-copy world mo (actors (append (world-actors mo) (generate (runtime-tick w) )))))
            (define mond (execute-msg mon '(move 0 1) "created"))
-           (runtime mond))])
+           (define monde (execute-msg mond '(move 0 -1) "enemy"))
+           (runtime monde (add1 (runtime-tick w)) ))])
          
              
            
@@ -66,17 +68,14 @@
 ;;;;;;;;;;;;;;;;;;;;;;;
 
 
-(define me (actor '(3 3) '() (fg 'red (raart:text ">")) "player"))
-(define ma (actor '(1 40) '() (fg 'blue (raart:text "<<")) "enemy"))
-(define mo (actor '(2 50) '() (fg 'green (raart:text "<<<")) "enemy"))
-(define mi (actor '(3 60) '() (fg 'white (raart:text "<<<")) "enemy"))
-(define monde (world (list me ma mo mi ) ))
+(define me (actor '(3 3) '() (fg 'red (raart:text "Fight")) "player"))
+(define monde (world (list me) ))
 
 ;; Starter function
 (define (start-application)
   (lux:call-with-chaos
    (raart:make-raart)
-   (lambda () (lux:fiat-lux (runtime monde ))))
+   (lambda () (lux:fiat-lux (runtime monde 0))))
   (void))
 
 (start-application)

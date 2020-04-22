@@ -91,7 +91,8 @@
 (provide actor name-of-actor actor-location
          actor-category y-pos-top-mail x-pos-top-mail
          actor-send actor-update update-position actor-mailbox
-         colliding? collisions?)
+         colliding? collisions?
+         )
 
                      
 

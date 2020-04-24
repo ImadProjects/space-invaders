@@ -13,7 +13,7 @@
   (prefix-in lux: lux)
   (prefix-in raart: raart))
 
-(define rows 80)
+(define rows 60)
 (define cols 120)
 (define world-rows (- rows 3))
 (define world-cols cols)

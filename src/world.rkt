@@ -41,11 +41,7 @@
                                               '()
                                               )))))
 
-(define (execute-msg world msg category)
-  (if (null? msg)
-      (update-world world)
-  (update-world (send-world world msg category))  
-  ))
+
 
 ;;;;;;;;;;;;;;;;; Time Travel ;;;;;;;;;;;;;;;;;;;
 
@@ -82,7 +78,15 @@
            (add1 (cadr (actor-location (car (world-actors worldN))))))]
     [else
      (shoot (struct-copy world worldN (actors (cdr (world-actors worldN)) )))]))
-      
+
+;;;;;;;;;;;;;;;;;;;; Out of Raart ;;;;;;;;;;;;;
+
+(define (out-raart? player)
+  (or (< (car (actor-location player)) 0)
+      (> (car (actor-location player)) 120)
+      (< (cadr (actor-location player)) 0)
+      (> (cadr (actor-location player)) 60)
+      ))
 ;;;;;;;;;;;;;;;;;;;; Dead Actors ;;;;;;;;;;;;;;
 
 (define (world-filter w filt)
@@ -103,7 +107,8 @@
   
 (define (world-alive w)
   (struct-copy world w (actors (filter
-                                (lambda (act) (not (collisions? act (world-actors (world-except w act)))))
+                                (lambda (act) (and (not (collisions? act (world-actors (world-except w act))))
+                                                  (not (out-raart? act))))
                                 (world-actors w)))))
 
 
@@ -122,7 +127,11 @@
   
                      
 
-
+(define (execute-msg world msg category)
+  (if (null? msg)
+      (update-world world)
+  (world-alive (update-world (send-world world msg category)))  
+  ))
 
 ;;;;;;;;;;;;;;;;;;;; Provide ;;;;;;;;;;;;;;;;;;;
 (provide (struct-out world))

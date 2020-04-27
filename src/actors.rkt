@@ -81,12 +81,10 @@
 (define (colliding? actor1 actor2)
   (equal? (actor-position actor1)
               (actor-position actor2)))
-(define (collide-display actor)
-  (equal? (cadr (actor-position actor)) 1))
+
 (define (collisions? x list-actors)
    (for/or ([i list-actors])
-     (or (colliding? x i)
-     (collide-display x))))
+     (colliding? x i)))
 
 ;;;;;;;;;; Provide ;;;;;;;;;;;;;
 
@@ -96,10 +94,6 @@
          colliding? collisions?
          )
 
-
-(define act (actor '(5 1) '() (fg 'red (raart:text ">>>")) "enemy"))
-
-(collide-display act)
 
 
 

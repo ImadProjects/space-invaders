@@ -1,13 +1,23 @@
 #lang racket
 (require "actors.rkt")
 (require "world.rkt")
-(require "main.rkt")
+;(require "runtime.rkt")
  
 (provide (contract-out     
-    [actor-location (-> vactor? location?)]
-    [actor-send (-> vactor? message? vactor?)]
-    [update-position ( -> vactor? vactor? )]
-    [actor-update ( -> vactor? list?)]
+    [actor-location (-> actor? list?)]
+    [actor-send (-> actor? list? actor?)]
+    [update-position ( -> actor? actor? )]
+    ;[actor-update ( -> actor? list?)]
 ))
 
-(provide actor actor-mailbox new-actor-update world world-actors send-to-world runtime runtime-tick runtime-duree update-world game x-position-top-mail y-position-top-mail collisions? name-of-actor)
+(provide  actor name-of-actor actor?
+          actor-category y-pos-top-mail x-pos-top-mail
+          actor-mailbox actor-update
+          colliding? collisions?)
+
+(provide (struct-out world))
+(provide send-world update-world execute-msg
+         shoot save-world world-travel
+         world-filter world-alive
+         actor-alive?
+         generate) 

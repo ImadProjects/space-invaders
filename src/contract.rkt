@@ -1,23 +1,35 @@
 #lang racket
 (require "actors.rkt")
 (require "world.rkt")
-;(require "runtime.rkt")
- 
+
+;;actors.rkt
 (provide (contract-out     
     [actor-location (-> actor? list?)]
     [actor-send (-> actor? list? actor?)]
-    [update-position ( -> actor? actor? )]
-    ;[actor-update ( -> actor? list?)]
+    [update-position (-> actor? actor? )]
+    [actor-update (-> actor? list?)]
+    [y-pos-top-mail (-> actor? number?)]
+    [x-pos-top-mail (-> actor? number?)]
+    [name-of-actor (-> actor? string?)]
+    [actor-category (-> actor? (lambda(x) (not (empty? x))))]
+    [colliding? (-> actor? actor? boolean?)]
+    [collisions? (-> actor? list? boolean?)]
 ))
 
-(provide  actor name-of-actor actor?
-          actor-category y-pos-top-mail x-pos-top-mail
-          actor-mailbox actor-update
-          colliding? collisions?)
+(provide  actor  actor? actor-mailbox)
 
+;;world.rkt
 (provide (struct-out world))
-(provide send-world update-world execute-msg
-         shoot save-world world-travel
+
+(provide (contract-out
+          [send-world (-> world? list? (lambda(x) (not (empty? x))) world?)]
+          [update-world (-> world? world?)]
+          [save-world (-> world? void?)]
+          [world-travel (-> number? world? world?)]
+          ))
+
+(provide execute-msg
+         shoot
          world-filter world-alive
          actor-alive?
          generate) 

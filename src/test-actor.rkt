@@ -76,31 +76,21 @@
                                      (list (actor '(0 1) '() "test" "player")
                                      (actor '(1 1) '() "test" "player")
                                      (actor '(1 0) '() "test" "player"))) #t))))
+      
+ (test-case ;; ne marche pas pour l'instant
+    "Tests for the time travel feature"
+    (let * ([current (world (list (actor '(0 1) '((move 0 0)) "current" "player")))]
+            [expected (world (list (actor '(0 1) '((move 0 5)) "expected" "player")))])
+      (letrec ([generate (lambda (w n)
+                         (if (= n 0)
+                             w
+                             (generate (cons (world (list (actor '(0 1) '((move 0 0)) "old" "player"))) w) (- n 1))))])
+        (and (map (lambda(x) x) (append (generate '() 20) (list expected)))
+             (check-equal? (world-travel 5 current) expected)))))
+     
    ))
 
 
-
-
-
-
-
-
-
-
-
-
-
-  ;;
-;;   (test-case
-;;    "Adding to empty set yields size one"
-;;    (let* ([set (set-empty)])
-;;      (check-equal? (set-length (set-add set 666)) 1)))
-;;
-;;   (test-case
-;;    "Integer added to empty set is found back"
-;;    (let* ([set (set-empty)])
-;;      (check-true (set-mem (set-add set 666) 666))
-;;      (check-false (set-mem (set-add set 666) 667))))
-
+;
 (printf "Running tests\n")
 (run-tests all-tests)

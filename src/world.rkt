@@ -133,10 +133,19 @@
   (world-alive (update-world (send-world world msg category)))  
   ))
 
+
+;;;;;;;;;;;;;;;end of the game ;;;;;;;;;;;;;;;;
+
+(define (player-dead? w)
+(if (null? (world-filter w "player"))
+      #t
+      #f))
+
 ;;;;;;;;;;;;;;;;;;;; Provide ;;;;;;;;;;;;;;;;;;;
 (provide (struct-out world))
 (provide send-world update-world execute-msg
          shoot save-world world-travel
          world-filter world-alive
          actor-alive?
-         generate) 
+         generate
+         player-dead?) 

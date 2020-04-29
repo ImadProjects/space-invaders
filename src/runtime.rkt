@@ -18,9 +18,11 @@
 (define world-rows (- rows 3))
 (define world-cols cols)
 
+(define gameover (actor '(5 30) '() (fg 'red (raart:text "GAME OVER")) "projectile"))
 
+(define over (world (list gameover) ))
 
-(struct runtime (world0 tick) ;pos: position du curseur ou du dernier missile tiré ? à revoir 
+(struct runtime (world0 tick) 
         #:methods lux:gen:word
         [(define (word-fps w)      ;; FPS desired rate
            10.0)
@@ -59,8 +61,10 @@
            (define mon (struct-copy world mo (actors (append (world-actors mo) (generate (runtime-tick w) )))))
            (define mond (execute-msg mon '(move 0 1) "created"))
            (define monde (execute-msg mond '(move 0 -1) "enemy"))
-           (runtime monde (add1 (runtime-tick w)) ))])
-         
+            (if (player-dead? (runtime-world0 w))
+                 (runtime over (runtime-tick w))
+                 (runtime monde (add1 (runtime-tick w)))))])
+          
              
            
       
@@ -70,6 +74,7 @@
 
 (define me (actor '(3 3) '() (fg 'red (raart:text "Fight")) "player"))
 (define monde (world (list me) ))
+
 
 ;; Starter function
 (define (start-application)

@@ -48,7 +48,7 @@
 (define latest-worlds '())
 
 (define (save-world w)
-  (if (<= (length latest-worlds) 9)
+  (if (<= (length latest-worlds) 20)
       (set! latest-worlds
             (cons w latest-worlds))
       (set! latest-worlds
@@ -64,7 +64,7 @@
     (travel (time n) latest-worlds current-world)))
                    
 (define (time n)
-  (if (and (>= n 1) (< n 9))
+  (if (and (>= n 1) (< n 20))
       n
       0))
           

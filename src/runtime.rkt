@@ -33,8 +33,8 @@
              ["<up>"     (struct-copy runtime w (world0 (execute-msg (runtime-world0 w) '(move -1 0) "player")))]
              ["<right>"  (struct-copy runtime w (world0 (execute-msg (runtime-world0 w) '(move 0 1) "player")))]
              ["<left>"   (struct-copy runtime w (world0 (execute-msg (runtime-world0 w) '(move 0 -1) "player")))]
-             
-             ["8" (struct-copy runtime w (world0 (world-travel 8 (runtime-world0 w))))]
+             ["r" (struct-copy runtime w (world0 monde))]
+             ["p" (struct-copy runtime w (world0 (world-travel 15 (runtime-world0 w))))]
              
              [" "        (struct-copy runtime w (world0 (execute-msg (runtime-world0 w) (cons 'create (shoot (runtime-world0 w))) "player")))]
              [_  w]   ;; Otherwise do nothing

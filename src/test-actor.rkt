@@ -3,6 +3,16 @@
 (require rackunit)
 (require rackunit/text-ui)
 (require "contract.rkt")
+(require racket/match
+         racket/format
+         racket/list
+         lux
+         raart)
+(require racket/trace)
+(require
+  (prefix-in ct: charterm)
+  (prefix-in lux: lux)
+  (prefix-in raart: raart))
 
 (define all-tests
   (test-suite
@@ -33,13 +43,13 @@
                 (check-equal? (actor-location (cadr (actor-update actor-test))) '(2 3))
                 (check-equal? (actor-location (caddr (actor-update actor-test))) '(1 2)))))
    (test-case
-     "checks the mails of world"
+     "ensures send-world sends to world"
      (let * ([world-test (world (list (actor '(1 2) '() "test" "player") (actor '(2 3) '() "test" "enemy")))]
            [world-expected (world (list (actor '(1 2) '((move 1 1)) "test" "player") (actor '(2 3) '() "test" "enemy")))])
            (check-equal? (send-world world-test '(move 1 1) "player") world-expected)))
                          
    (test-case
-    "Checks that the actors in the world play"
+    "updates the actors in the world"
     (let * ([world-test (world (list (actor '(0 1) '((move 2 3)) "test" "player") (actor '(4 5) '((move 6 7)) "test" "player")))]
             [world-expected (world (list (actor '(2 4) '() "francis" "player") (actor '(10 12) '() "francois" "player")))])
       (and (check-equal? (actor-location (car (world-actors (update-world world-test)))) '(10 12))
@@ -54,7 +64,7 @@
       ;(check-equal? (actor-update actor-test) expected)))
    
    (test-case
-    "Checks that the actors which should collide collide"
+    "verifies that the actors which should collide collide"
     (let * ([actors (list (actor '(0 1) '() "test" "player")
                           (actor '(1 1) '() "test" "player")
                           (actor '(1 0) '() "test" "player"))]
@@ -63,7 +73,7 @@
       (check-equal? (map (lambda(x) (colliding? actor-test x))  actors) expected)))
    
       (test-case
-    "Checks that colliding? detects collisions"
+    " colliding? detects collisions"
     (let * ([actors-not-colliding (list (actor '(0 1) '() "test" "player")
                                         (actor '(1 1) '() "test" "player")
                                         (actor '(1 0) '() "test" "player"))]
@@ -77,7 +87,7 @@
                                      (actor '(1 1) '() "test" "player")
                                      (actor '(1 0) '() "test" "player"))) #t))))
       
- (test-case ;; ne marche pas pour l'instant
+ (test-case
     "Tests for the time travel feature"
     (let * ([current (world (list (actor '(0 1) '((move 0 0)) "current" "player")))]
             [expected (world (list (actor '(0 1) '((move 0 5)) "expected" "player")))])
@@ -85,12 +95,25 @@
                          (if (= n 0)
                              w
                              (generate (cons (world (list (actor '(0 1) '((move 0 0)) "old" "player"))) w) (- n 1))))])
-        (and (map (lambda(x) x) (append (generate '() 20) (list expected)))
-             (check-equal? (world-travel 5 current) expected)))))
-     
+        (and (save-world (world (list (actor '(0 1) '((move 0 5)) "expected" "player"))))
+             (save-world (world (list (actor '(0 1) '((move 0 0)) "old" "player"))))
+             (save-world (world (list (actor '(0 1) '((move 0 0)) "old" "player"))))
+             (check-equal? (world-travel 3 current) expected)))))
+
+ (test-case
+     "shoot finds the player in the world and returns the coordinates of the location in front of him"
+     (let * ([current (world (list (actor '(0 10) '() "bad_guy" "enemy") (actor '(0 1) '() "jeremy" "player") (actor '(0 9) '() "bad_guy" "enemy")))]
+             [expected '(0 2)])
+       (check-equal? (shoot current) expected)))
+; (test-case   ;;;le check-equal? n'aime pas le #<raart>
+ ; "test for the enemy generation"
+  ;(let * ([expected-1 '()])
+   ;       (letrec ([gen (lambda (n actors) (cond [(< n 1) actors]
+    ;                                            [else (gen (- n 2) (cons (actor (list n 60) '() (fg 'green (raart:text "<<")) "enemy") actors))]))])
+     ;       (or (check-equal? (generate 1) expected-1)
+      ;           (check-equal? (generate 0) (gen 19 '()))))))
+    
    ))
 
-
-;
 (printf "Running tests\n")
 (run-tests all-tests)

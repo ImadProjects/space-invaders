@@ -26,10 +26,10 @@
           [update-world (-> world? world?)]
           [save-world (-> world? void?)]
           [world-travel (-> number? world? world?)]
+          [shoot (-> world? list?)]
+          [generate (-> number? list?)]
           ))
 
 (provide execute-msg
-         shoot
          world-filter world-alive
-         actor-alive?
-         generate) 
+         actor-alive?) 

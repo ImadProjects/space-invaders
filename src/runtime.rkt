@@ -72,7 +72,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;
 
 
-(define me (actor '(3 3) '() (fg 'red (raart:text "Fight")) "player"))
+(define me (actor '(9 1) '() (fg 'red (raart:text ">")) "player"))
 (define monde (world (list me) ))
 
 

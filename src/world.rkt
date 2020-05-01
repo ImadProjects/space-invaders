@@ -113,7 +113,7 @@
 
 
 ;;;;;;;;;;;;;;;; Generate enemies ;;;;;;;;;;;;;;;;
-(define (generate tick)
+(define (generates tick) ;if you want to use this function remove s 
   (if (not (zero? (remainder tick 5))) '()
   (letrec ([generateN (lambda (generated n)
                        (cond
@@ -125,7 +125,17 @@
                                      (sub1 n))] ))])
     (generateN '() 20))))
   
-                     
+
+(define k (integer-in 1 10))  
+
+(define (generate tick)  
+(if (equal? (modulo tick 3) 0)
+         (list (actor (list 20 60) '() (fg 'red (raart:text "#")) "enemy")
+               (actor (list 19 (+ 60 (random 6))) '() (fg 'red (raart:text "#")) "enemy")
+               (actor (list 0 60) '() (fg 'red (raart:text "#")) "enemy")
+               (actor (list (+ 1 (random 19))  60) '() (fg 'green (raart:text "<")) "enemy"))
+          '()))          
+
 
 (define (execute-msg world msg category)
   (if (null? msg)
@@ -149,3 +159,6 @@
          actor-alive?
          generate
          player-dead?) 
+        
+(generate 3) 
+  

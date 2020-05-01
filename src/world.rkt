@@ -139,14 +139,15 @@
 (define (generate-walls tick)
 (if (equal? (modulo tick 3) 0)
     (list (actor (list 20 60) '() (fg 'red (raart:text "#")) "enemy")
-               (actor (list 19 (+ 60 (random 6))) '() (fg 'red (raart:text "#")) "enemy")
-               (actor (list 0 60) '() (fg 'red (raart:text "#")) "enemy"))
+               (actor (list (+ 17 (random 3)) (+ 60 (random 3))) '() (fg 'red (raart:text "#")) "enemy")
+               (actor (list 0 60) '() (fg 'red (raart:text "#")) "enemy")
+                (actor (list (random 3) (+ 60 (random 3))) '() (fg 'red (raart:text "#")) "enemy"))
      '()))
 
 
 (define (generate-projectil tick)
 (if (equal? (modulo tick 3) 0)
-         (list (actor (list (+ 1 (random 19))  60) '() (fg 'green (raart:text "<")) "enemy"))
+         (list (actor (list (+ 3 (random 14))  60) '() (fg 'green (raart:text "<")) "enemy"))
           '()))
 
 

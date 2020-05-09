@@ -10,15 +10,14 @@
     [actor-update (-> actor? list?)]
     [y-pos-top-mail (-> actor? number?)]
     [x-pos-top-mail (-> actor? number?)]
-    [name-of-actor (-> actor? string?)]
     [actor-category (-> actor? (lambda(x) (not (empty? x))))]
     [colliding? (-> actor? actor? boolean?)]
     [collisions? (-> actor? list? boolean?)]
-))
+    ))
 
-(provide  actor  actor? actor-mailbox)
+(provide actor name-of-actor actor? actor-mailbox)
 
-;;world.rkt
+;world.rkt
 (provide (struct-out world))
 
 (provide (contract-out
@@ -28,8 +27,10 @@
           [world-travel (-> number? world? world?)]
           [shoot (-> world? list?)]
           [generate (-> number? list?)]
-          ))
+          [player-dead? (-> world? boolean?)]
+          [actor-alive? (-> actor? world? boolean?)]
+           ))
 
 (provide execute-msg
          world-filter world-alive
-         actor-alive?) 
+         )

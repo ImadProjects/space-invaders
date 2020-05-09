@@ -1,7 +1,8 @@
 #lang racket
 (require racket/contract)
-(require "world.rkt")
-(require "actors.rkt")
+;(require "world.rkt")
+;(require "actors.rkt")
+(require "contract.rkt")
 
 (require racket/match
          racket/format

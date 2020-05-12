@@ -94,13 +94,14 @@ actors est la liste des acteurs intervenants dans le monde.}
 
 @defproc[(execute-msg [world world?]) world]{ Renvoie un monde dont les acteurs ont été mis à jour, le monde ne contenant que des acteurs vivant}
 
-A faire:
+@defproc[(world-filter [world world?] [filter procedure?]) world]{ Renvoie un monde dont les acteurs vérifient les conditions imposées par la fonction filtre.}
 
-World Filter?
-
-Shoot?
-
+@defproc[(shoot [world world?]) world]{ Renvoie un monde avec un nouveau acteur de type "missile" créé par le player.}
 Generate?
+
+@defproc[(generate [tick any?]) list]{ Renvoie une liste d'acteurs de type "enemy". Selon la congruance de tick modulo 3, les acteurs sont générés aléatoirement.}
+
+A faire
 
 Runtime
 

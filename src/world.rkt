@@ -82,10 +82,10 @@
 ;;;;;;;;;;;;;;;;;;;; Out of Raart ;;;;;;;;;;;;;
 
 (define (out-raart? player)
-  (or (< (car (actor-location player)) 0)
-      (> (car (actor-location player)) 120)
-      (< (cadr (actor-location player)) 0)
-      (> (cadr (actor-location player)) 60)
+  (or (< (car (actor-location player)) x1)
+      (> (car (actor-location player)) x2)
+      (< (cadr (actor-location player)) y1)
+      (> (cadr (actor-location player)) y2)
       ))
 ;;;;;;;;;;;;;;;;;;;; Dead Actors ;;;;;;;;;;;;;;
 
@@ -113,41 +113,29 @@
 
 
 ;;;;;;;;;;;;;;;; Generate enemies ;;;;;;;;;;;;;;;;
-(define (generates tick) ;if you want to use this function remove s 
-  (if (not (zero? (remainder tick 5))) '()
-  (letrec ([generateN (lambda (generated n)
-                       (cond
-                        [(zero? n)
-                           generated]
-                        [(zero? (remainder n 2)) (generateN generated (sub1 n))]
-                        [else (generateN (cons (actor (list n 60) '() (fg 'green (raart:text "<<")) "enemy")
-                                           generated)
-                                     (sub1 n))] ))])
-    (generateN '() 20))))
-  
-
-(define k (integer-in 1 10))  
-
-(define (generatet tick)  ;if you want to use this function remove t
-(if (equal? (modulo tick 3) 0)
-         (list (actor (list 20 60) '() (fg 'red (raart:text "#")) "enemy")
-               (actor (list 19 (+ 60 (random 6))) '() (fg 'red (raart:text "#")) "enemy")
-               (actor (list 0 60) '() (fg 'red (raart:text "#")) "enemy")
-               (actor (list (+ 1 (random 19))  60) '() (fg 'green (raart:text "<")) "enemy"))
-          '()))          
 
 (define (generate-walls tick)
-(if (equal? (modulo tick 3) 0)
-    (list (actor (list 20 60) '() (fg 'red (raart:text "#")) "enemy")
-               (actor (list (+ 17 (random 3)) (+ 60 (random 3))) '() (fg 'red (raart:text "#")) "enemy")
-               (actor (list 0 60) '() (fg 'red (raart:text "#")) "enemy")
-                (actor (list (random 3) (+ 60 (random 3))) '() (fg 'red (raart:text "#")) "enemy"))
-     '()))
+  (if (equal? (modulo tick 3) 0)
+      (list (actor (list x1 y2) '() (fg 'red (raart:text "#")) "enemy")
+            (actor (list (add1 x1) y2) '() (fg 'red (raart:text "#")) "enemy")
+            (actor (list (+ 2 x1) y2) '() (fg 'red (raart:text "#")) "enemy")
+            (actor (list (+ (+ (random 3) 2) x1) y2) '() (fg 'red (raart:text "#")) "enemy")
+
+            (actor (list x2 y2) '() (fg 'red (raart:text "#")) "enemy")
+            (actor (list (sub1 x2) y2) '() (fg 'red (raart:text "#")) "enemy")
+            (actor (list (- x2 2) y2) '() (fg 'red (raart:text "#")) "enemy")
+            (actor (list (- x2 (+ (random 3) 2)) y2) '() (fg 'red (raart:text "#")) "enemy"))            
+      '()
+      ))
 
 
 (define (generate-projectil tick)
-(if (equal? (modulo tick 3) 0)
-         (list (actor (list (+ 3 (random 14))  60) '() (fg 'green (raart:text "<")) "enemy"))
+(if (equal? (modulo tick 5) 0)
+         (list (actor (list (+ (+ 5 x1) (random 5))  y2) '() (fg 'green (raart:text "<")) "enemy")
+               (actor (list (+ (+ 10 x1) (random 5))  y2) '() (fg 'green (raart:text "<")) "enemy")
+               (actor (list (+ (+ 15 x1) (random 4))  y2) '() (fg 'green (raart:text "<")) "enemy")
+               (actor (list (+ (+ 19 x1) (random 2))  y2) '() (fg 'green (raart:text "<")) "enemy")
+               )
           '()))
 
 

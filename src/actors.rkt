@@ -86,7 +86,14 @@
    (for/or ([i list-actors])
      (colliding? x i)))
 
-;;;;;;;;;; Provide ;;;;;;;;;;;;;
+;;;;;;;; Terminal dimensions ;;;;;;;;
+
+(define x1 0)
+(define x2 26)
+(define y1 0)
+(define y2 120)
+
+;;;;;;;;;;;; Provide ;;;;;;;;;;;;;;;;
 
 (provide actor name-of-actor actor-location actor?
          actor-category y-pos-top-mail x-pos-top-mail
@@ -94,7 +101,7 @@
          colliding? collisions?
          )
 
-
+(provide x1 x2 y1 y2)
 
 
 

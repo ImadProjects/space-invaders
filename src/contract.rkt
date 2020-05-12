@@ -34,3 +34,5 @@
 (provide execute-msg
          world-filter world-alive
          )
+
+(provide x1 x2 y1 y2)

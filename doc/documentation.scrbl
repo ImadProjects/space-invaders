@@ -85,9 +85,14 @@ actors est la liste des acteurs intervenants dans le monde.}
 
 @defproc[(world-travel [n number?] [current-world world?]) world?]{ le monde qui correspond au n-ième dernier monde parcouru. Si n >= 20 ou n < 0, on renvoie @racket[current-world].}
 
+
 @defproc[(actor-alive? [x actor?] [w world]) boolean]{renvoie @racket[#t] si l'acteur x n'entre pas en collision avec d'autres acteurs, @racket[#f] sinon.}
 
 @defproc[(player-dead? [w world]) booleen]{renvoie @racket[#t] si il n'y a aucun @racket[actor] de catégorie "player" dans le @racket[world] w, @racket[#f] sinon.}
+
+@defproc[(world-alive [world world?]) world]{ Renvoie un monde qui n'a que des acteurs vivants }
+
+@defproc[(execute-msg [world world?]) world]{ Renvoie un monde dont les acteurs ont été mis à jour, le monde ne contenant que des acteurs vivant}
 
 A faire:
 

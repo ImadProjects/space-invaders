@@ -6,5 +6,3 @@ build:
 test:
 	racket src/test-actor.rkt
 
-doc:
-	echo "doc"

@@ -56,13 +56,7 @@
            (check-equal? (actor-location (cadr (world-actors (update-world world-test)))) '(2 4))
            (check-equal? (actor-mailbox (car (world-actors (update-world world-test)))) '())
            (check-equal? (actor-mailbox (cadr (world-actors (update-world world-test)))) '()))))
-   
-   ;(test-case
-    ;"checks that an actor with a messaging message messages the message"
-    ;(let * ([actor-test (actor '(0 0) '((message (move 1 1))) "test" "player")]
-     ;       [expected '(move 1 1)])
-      ;(check-equal? (actor-update actor-test) expected)))
-   
+
    (test-case
     "verifies that the actors which should collide collide"
     (let * ([actors (list (actor '(0 1) '() "test" "player")
@@ -105,14 +99,6 @@
      (let * ([current (world (list (actor '(0 10) '() "bad_guy" "enemy") (actor '(0 1) '() "jeremy" "player") (actor '(0 9) '() "bad_guy" "enemy")))]
              [expected '(0 2)])
        (check-equal? (shoot current) expected)))
-; (test-case   ;;;le check-equal? n'aime pas le #<raart>
- ; "test for the enemy generation"
-  ;(let * ([expected-1 '()])
-   ;       (letrec ([gen (lambda (n actors) (cond [(< n 1) actors]
-    ;                                            [else (gen (- n 2) (cons (actor (list n 60) '() (fg 'green (raart:text "<<")) "enemy") actors))]))])
-     ;       (or (check-equal? (generate 1) expected-1)
-      ;           (check-equal? (generate 0) (gen 19 '()))))))
-    
    ))
 
 (printf "Running tests\n")

@@ -23,7 +23,7 @@
 (define world-rows x2)
 (define world-cols y2)
 
-(define gameover (actor '(5 30) '() (fg 'red (raart:text "GAME OVER")) "projectile"))
+(define gameover (actor '(12 55) '() (fg 'red (raart:text "GAME OVER")) "projectile"))
 
 (define over (world (list gameover) ))
 

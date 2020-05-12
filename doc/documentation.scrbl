@@ -81,9 +81,23 @@ actors est la liste des acteurs intervenants dans le monde.}
                                                                                    
 @defproc[(update-world [world world?]) updated-world]{renvoie une copie du monde où tous les acteurs ont été mis à jour}
 
-@defproc[(update-world [world world?]) void]{la liste contenant les derniers worlds est modifié par effet de bord, le monde est sauvegardé par ordre du plus récent au moins récent de gauche à droite. Si la taille du monde est égale à 20, le monde le plus ancien est effacé.}
+@defproc[(save-world [world world?]) void]{la liste contenant les derniers worlds est modifié par effet de bord, le monde est sauvegardé par ordre du plus récent au moins récent de gauche à droite. Si la taille de la liste est égale à 20, le monde le plus ancien de la liste est effacé.}
 
 @defproc[(world-travel [n number?] [current-world world?]) world?]{ le monde qui correspond au n-ième dernier monde parcouru. Si n >= 20 ou n < 0, on renvoie @racket[current-world].}
 
+@defproc[(actor-alive? [x actor?] [w world]) boolean]{renvoie @racket[#t] si l'acteur x n'entre pas en collision avec d'autres acteurs, @racket[#f] sinon.}
+
+@defproc[(player-dead? [w world]) booleen]{renvoie @racket[#t] si il n'y a aucun @racket[actor] de catégorie "player" dans le @racket[world] w, @racket[#f] sinon.}
+
+A faire:
+
 World Filter?
 
+Shoot?
+
+Generate?
+
+Runtime
+
+
+@section{Runtime}

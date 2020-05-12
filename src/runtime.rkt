@@ -38,8 +38,8 @@
              ["q" #f]  ;; Quit the application
              ["<down>"   (struct-copy runtime w (world0 (execute-msg (runtime-world0 w) '(move 1 0) "player")))]
              ["<up>"     (struct-copy runtime w (world0 (execute-msg (runtime-world0 w) '(move -1 0) "player")))]
-             ["<right>"  (struct-copy runtime w (world0 (execute-msg (runtime-world0 w) '(move 0 1) "player")))]
-             ["<left>"   (struct-copy runtime w (world0 (execute-msg (runtime-world0 w) '(move 0 -1) "player")))]
+             ["<right>"  (struct-copy runtime w (world0 (execute-msg (runtime-world0 w) '(move 0 2) "player")))]
+             ["<left>"   (struct-copy runtime w (world0 (execute-msg (runtime-world0 w) '(move 0 -2) "player")))]
              ["r" (struct-copy runtime w (world0 monde))]
              ["p" (struct-copy runtime w (world0 (world-travel 15 (runtime-world0 w))))]
              
@@ -81,7 +81,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;
 
 
-(define me (actor '(1 0) '() (fg 'red (raart:text ">")) "player"))
+(define me (actor '(12 40) '() (fg 'red (raart:text ">")) "player"))
 (define monde (world (list me) ))
 
 

@@ -101,9 +101,16 @@ Generate?
 
 @defproc[(generate [tick any?]) list]{ Renvoie une liste d'acteurs de type "enemy". Selon la congruance de tick modulo 3, les acteurs sont générés aléatoirement.}
 
-A faire
-
-Runtime
-
-
 @section{Runtime}
+
+@defstruct[runtime ([world-fps number?] [world-event any?] [world-output any?] [world-tick number?])]{
+@itemize[
+ (item "world-fps initialise le nombre d’images par seconde que le jeu est censé afficher")
+ (item "world-event gère les événements qui se produisent et les interactionsavec les périphériques extérieurs")
+ (item "world-output permet d’afficher les éléments de la bibliothèque raart sur le terminal")
+ (item "world-tick s’occupe de mettre à jour la nouvelle runtime après chaque unité de temps")]
+Le jeu se lance avec la fonction @racket[(start-application)].
+}
+
+
+

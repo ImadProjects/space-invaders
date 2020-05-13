@@ -91,7 +91,7 @@
 (define x1 0)
 (define x2 26)
 (define y1 0)
-(define y2 120)
+(define y2 100)
 
 ;;;;;;;;;;;; Provide ;;;;;;;;;;;;;;;;
 

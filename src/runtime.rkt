@@ -14,16 +14,8 @@
   (prefix-in lux: lux)
   (prefix-in raart: raart))
 
-;; Get the terminal dimensions
-(define-values (term-cols term-rows)
-  (ct:with-charterm (ct:charterm-screen-size)))
 
-(define rows 60)
-(define cols y2)
-(define world-rows x2)
-(define world-cols y2)
-
-(define gameover (actor '(12 55) '() (fg 'red (raart:text "GAME OVER")) "projectile"))
+(define gameover (actor '(5 30) '() (fg 'red (raart:text "GAME OVER")) "projectile"))
 
 (define over (world (list gameover) ))
 
@@ -38,8 +30,8 @@
              ["q" #f]  ;; Quit the application
              ["<down>"   (struct-copy runtime w (world0 (execute-msg (runtime-world0 w) '(move 1 0) "player")))]
              ["<up>"     (struct-copy runtime w (world0 (execute-msg (runtime-world0 w) '(move -1 0) "player")))]
-             ["<right>"  (struct-copy runtime w (world0 (execute-msg (runtime-world0 w) '(move 0 2) "player")))]
-             ["<left>"   (struct-copy runtime w (world0 (execute-msg (runtime-world0 w) '(move 0 -2) "player")))]
+             ["<right>"  (struct-copy runtime w (world0 (execute-msg (runtime-world0 w) '(move 0 1) "player")))]
+             ["<left>"   (struct-copy runtime w (world0 (execute-msg (runtime-world0 w) '(move 0 -1) "player")))]
              ["r" (struct-copy runtime w (world0 monde))]
              ["p" (struct-copy runtime w (world0 (world-travel 15 (runtime-world0 w))))]
              
@@ -54,7 +46,7 @@
                   #:halign 'left
                   (text (~a "Hello! Enjoy it! Press q to quit."))
                   
-                  (raart:frame (for/fold ([c (raart:blank  world-cols world-rows)])
+                  (raart:frame (for/fold ([c (raart:blank  y2 x2)])
                                          ([actor (in-list (world-actors world0))])
                                  (raart:crop y1 y2 x1 (+ 3 x2)
                                              (raart:place-at c
@@ -81,7 +73,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;
 
 
-(define me (actor '(12 40) '() (fg 'red (raart:text ">")) "player"))
+(define me (actor '(1 0) '() (fg 'red (raart:text ">")) "player"))
 (define monde (world (list me) ))
 
 
@@ -92,6 +84,5 @@
    (lambda () (lux:fiat-lux (runtime monde 0 1))))
   (void))
 
-(start-application)
-;             (MyDisplay-pos w)
-     ;        (cadr (actor-location (car (world-actors (runtime-world (MyDisplay-run w) )))))
+;(start-application)
+(provide start-application)

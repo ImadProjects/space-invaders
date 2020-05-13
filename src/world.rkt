@@ -115,7 +115,7 @@
 ;;;;;;;;;;;;;;;; Generate enemies ;;;;;;;;;;;;;;;;
 
 (define (generate-walls tick)
-  (if (equal? (modulo tick 3) 0)
+  (if (equal? (modulo tick 4) 0)
       (list (actor (list x1 y2) '() (fg 'red (raart:text "#")) "enemy")
             (actor (list (add1 x1) y2) '() (fg 'red (raart:text "#")) "enemy")
             (actor (list (+ 2 x1) y2) '() (fg 'red (raart:text "#")) "enemy")
@@ -130,7 +130,7 @@
 
 
 (define (generate-projectil tick)
-(if (equal? (modulo tick 5) 0)
+(if (equal? (modulo tick 6) 0)
          (list (actor (list (+ (+ 5 x1) (random 5))  y2) '() (fg 'green (raart:text "<")) "enemy")
                (actor (list (+ (+ 10 x1) (random 5))  y2) '() (fg 'green (raart:text "<")) "enemy")
                (actor (list (+ (+ 15 x1) (random 4))  y2) '() (fg 'green (raart:text "<")) "enemy")

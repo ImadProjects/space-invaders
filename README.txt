@@ -4,6 +4,10 @@ To launch our game use the command : "make"
 
 To launch tests use the commande : "make test"
 
+To generate the documentation : "make documentation"
+
+To generate the report: "make rapport"
+
 How to play :
 Once the game is loaded, press "n" to start
 To move use the arrows

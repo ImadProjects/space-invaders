@@ -6,3 +6,8 @@ build:
 test:
 	racket src/test-actor.rkt
 
+documentation:
+	scribble --pdf  doc/documentation.scrbl 
+
+rapport:
+	pdflatex rapport/rapport.tex

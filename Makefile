@@ -9,5 +9,3 @@ test:
 documentation:
 	scribble --pdf  doc/documentation.scrbl 
 
-rapport:
-	pdflatex rapport/rapport.tex

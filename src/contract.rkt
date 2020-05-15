@@ -29,6 +29,7 @@
           [generate (-> number? list?)]
           [player-dead? (-> world? boolean?)]
           [actor-alive? (-> actor? world? boolean?)]
+	  [game (-> world? number? world?)]
            ))
 
 (provide execute-msg

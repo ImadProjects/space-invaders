@@ -1,11 +1,12 @@
 #lang racket
 
-(require racket/trace)
 (require racket/match
          racket/format
          racket/list
+         racket/trace
          lux
          raart)
+
 (require
   (prefix-in ct: charterm)
   (prefix-in lux: lux)
@@ -13,41 +14,44 @@
 
 ;;;;;;;;;;;;;;;;;; Actor structure and functions ;;;;;;;;;;;;
 
-(struct actor (position mailbox name category)#:transparent)
+(struct actor (position mailbox name category)#:transparent)   ;Actor's structure
 
-(define (name-of-actor player)
+(define (name-of-actor player)                                 ;Return actor's name
   (actor-name player))
 
-(define (actor-location player)
+(define (actor-location player)                                ;Return actor's location
   (actor-position player))
 
-(define (actor-send player new-msg)
+(define (actor-send player new-msg)                            ;Send a msg to th actor
   (struct-copy actor player (mailbox
                                 (cons new-msg
                                       (actor-mailbox player)))))
 
-(define (x-pos-top-mail player)
-  (cadar (actor-mailbox player)))
+(define (x-pos-top-mail player)                                ;Return the first position in
+  (cadar (actor-mailbox player)))                              ;the actor's mailbox
 
 (define (y-pos-top-mail player)
   (caddar (actor-mailbox player)))
 
-(define (update-position player)
-  (struct-copy actor player (position
-                                (list
-                                 (+
+(define (update-position player)                               ;Update actor's position by
+  (struct-copy actor player (position                          ;executing the first message
+                                (list                          ; in its mailbox
+                                 (+                            
                                   (car (actor-position player))
                                   (x-pos-top-mail player))
                                  (+ (cadr (actor-position player))
                                     (y-pos-top-mail player))))
                (mailbox (cdr (actor-mailbox player)))))
 
-(define (actor-update player)
+(define (actor-update player)                                  ;Execute every message in
+                                                               ;actor's mailbox
   (letrec ([update (lambda (new-player created-players created-msg)
                      (cond
+                       
                        ;;;;; If there is no msg ;;;;;
                        [(empty? (actor-mailbox new-player))
                         (cons new-player created-players)]
+                       
                        ;;;;; If the msg is: '(create x y) ;;;;;
                        [(equal? 'create (caar (actor-mailbox new-player)))
                         (update (struct-copy actor new-player (mailbox (cdr               ; our player
@@ -71,6 +75,7 @@
                                 created-players
                                 (cons (cdar (actor-mailbox new-player))
                                       created-msg) )]))])
+    
     (update player '() '())
     )
   )
@@ -78,15 +83,15 @@
 
 ;;;;;;;;;;; Colliding ;;;;;;;;;;;;;;;
 
-(define (colliding? actor1 actor2)
-  (equal? (actor-position actor1)
+(define (colliding? actor1 actor2)                             ;Check if the two actors
+  (equal? (actor-position actor1)                              ;are in the same position (collision)
               (actor-position actor2)))
 
-(define (collisions? x list-actors)
-   (for/or ([i list-actors])
+(define (collisions? x list-actors)                            ;Check if the actor has a
+   (for/or ([i list-actors])                                   ;collision with another actor
      (colliding? x i)))
 
-;;;;;;;; Terminal dimensions ;;;;;;;;
+;;;;;;;; Terminal dimensions ;;;;;;;;                          
 
 (define x1 0)
 (define x2 26)

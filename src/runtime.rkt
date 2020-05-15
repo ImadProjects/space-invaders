@@ -1,7 +1,5 @@
 #lang racket
 (require racket/contract)
-;(require "world.rkt")
-;(require "actors.rkt")
 (require "contract.rkt")
 
 (require racket/match
@@ -15,16 +13,17 @@
   (prefix-in raart: raart))
 
 
-(define gameover (actor '(5 30) '() (fg 'red (raart:text "GAME OVER")) "projectile"))
-
+(define gameover (actor '(13 45) '() (fg 'red (raart:text "GAME OVER")) "projectile"))
 (define over (world (list gameover) ))
 
 (struct runtime (world0 tick health) 
         #:methods lux:gen:word
         [(define (word-fps w)      ;; FPS desired rate
            10.0)
+         
          (define (word-label s ft) ;; Window label of the application
            "JUST ASCII IT!")
+         
          (define (word-event w e)  ;; Event Handler
            (match e
              ["q" #f]  ;; Quit the application
@@ -38,10 +37,10 @@
              [" "        (struct-copy runtime w (world0 (execute-msg (runtime-world0 w) (cons 'create (shoot (runtime-world0 w))) "player")))]
              [_  w]   ;; Otherwise do nothing
          ))
+         
          (define (word-output w)      ;; What to display for the application
            (match-define (runtime world0 tick health) w)
-           
-           (crop y1 (+ 5 y2) x1 (+ 10 x2)
+                     (crop y1 (+ 5 y2) x1 (+ 10 x2)
                  (vappend
                   #:halign 'left
                   (text (~a "Hello! Enjoy it! Press q to quit."))
@@ -54,15 +53,12 @@
                                                              (cadr (actor-location actor))
                                                              (name-of-actor actor)))))
                   (happend (text (~a "Health: " (runtime-health w)  " Score: " (runtime-tick w))))
-                  )))        
+                  )))
+         
          (define (word-tick w)        ;; Update function after one tick of time
            (match-define (runtime world0 tick health) w)
-           (save-world (runtime-world0 w))
-           (define mo (execute-msg (world-alive (runtime-world0 w)) '(move 0 0) "enemy"))
-           (define mon (struct-copy world mo (actors (append (world-actors mo) (generate (runtime-tick w) )))))
-           (define mond (execute-msg mon '(move 0 1) "created"))
-           (define monde (execute-msg mond '(move 0 -1) "enemy"))
-            (if (player-dead? (runtime-world0 w))
+           (define monde (game (runtime-world0 w) (runtime-tick w)))
+            (if (player-dead? monde)
                  (runtime over (runtime-tick w) health)
                  (runtime monde (add1 (runtime-tick w)) health)))])
           
@@ -84,5 +80,5 @@
    (lambda () (lux:fiat-lux (runtime monde 0 1))))
   (void))
 
-;(start-application)
+(start-application)
 (provide start-application)

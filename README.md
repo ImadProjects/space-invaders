@@ -1,4 +1,10 @@
+# Space Invaders
+
+
 Welcome to our Actor Shooting star project !
+
+
+![alt text,30%](rapport/jeu.png)
 
 To launch our game use the command : "make"
 
